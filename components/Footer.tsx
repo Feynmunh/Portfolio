@@ -10,6 +10,111 @@ const BLOCK_EMPTY = 0;
 const BLOCK_PURPLE = 1;
 const BLOCK_YELLOW = 2;
 
+const robotFrames = [
+  // Robot 1 F0
+  [
+    "                    ",
+    "                    ",
+    "    ##        ##    ",
+    "   ####      ####   ",
+    "    ##        ##    ",
+    "      ########      ",
+    "      #++++++#      ",
+    "      #++++++#      ",
+    "      ########      ",
+    "      #      #      ",
+    "     ##########     ",
+    "     # ########     ",
+    "     ##########     ",
+    "                    "
+  ],
+  // Robot 1 F1
+  [
+    "                    ",
+    "                    ",
+    "    ##        ##    ",
+    "   ##-##    ##-##   ",
+    "    ##        ##    ",
+    "      ########      ",
+    "      #------#      ",
+    "      #------#      ",
+    "      ########      ",
+    "      #      #      ",
+    "     ##########     ",
+    "     ######## #     ",
+    "     ##########     ",
+    "                    "
+  ],
+  // Robot 2 F0
+  [
+    "                    ",
+    "                    ",
+    "      ########      ",
+    "     ##########     ",
+    "    ###+####+###    ",
+    "    ############    ",
+    "    ##        ##    ",
+    "   ###        ###   ",
+    "   ### ###### ###   ",
+    "   ### #++++# ###   ",
+    "   ### ###### ###   ",
+    "       #    #       ",
+    "       ##  ##       ",
+    "                    "
+  ],
+  // Robot 2 F1
+  [
+    "                    ",
+    "                    ",
+    "      ########      ",
+    "     ##########     ",
+    "    ##-####-####    ",
+    "    ############    ",
+    "    ##        ##    ",
+    "   ###        ###   ",
+    "   ### ###### ###   ",
+    "   ### #----# ###   ",
+    "   ### ###### ###   ",
+    "       #    #       ",
+    "       ##  ##       ",
+    "                    "
+  ],
+  // Robot 3 F0
+  [
+    "                    ",
+    "         ##         ",
+    "         ##         ",
+    "       ######       ",
+    "      ########      ",
+    "      ##+##+##      ",
+    "      ########      ",
+    "       ######       ",
+    "         ##         ",
+    "      ########      ",
+    "      #  ##  #      ",
+    "         ##         ",
+    "        ####        ",
+    "                    "
+  ],
+  // Robot 3 F1
+  [
+    "                    ",
+    "         ++         ",
+    "         ##         ",
+    "       ######       ",
+    "      ########      ",
+    "      ##-##-##      ",
+    "      ########      ",
+    "  #    ######    #  ",
+    "  ##     ##     ##  ",
+    "   ##########   #   ",
+    "      #  ##  #      ",
+    "         ##         ",
+    "        ####        ",
+    "                    "
+  ]
+];
+
 function GlitchMatrix() {
   const [grid, setGrid] = useState<number[]>([]);
 
@@ -27,13 +132,24 @@ function GlitchMatrix() {
 
     setGrid(generateInitial());
 
+    let tickCount = 0;
+
     const intervalId = setInterval(() => {
+      tickCount++;
+      
       setGrid((prev) => {
         if (prev.length === 0) return prev;
         const next = [...prev];
         
-        // Randomly mutate small clusters to simulate a glitch sequence
-        const clusterCount = Math.floor(Math.random() * 4) + 1;
+        // 1. Natural fade/glitch of background
+        for(let i=0; i<next.length; i++) {
+            if (Math.random() < 0.25) { 
+                next[i] = BLOCK_EMPTY;
+            }
+        }
+        
+        // 2. Randomly mutate small clusters to simulate a glitch sequence
+        const clusterCount = Math.floor(Math.random() * 3) + 1;
         
         for (let c = 0; c < clusterCount; c++) {
           const startX = Math.floor(Math.random() * COLS);
@@ -56,6 +172,49 @@ function GlitchMatrix() {
             }
           }
         }
+
+        // 3. Draw the robot on top
+        // Cycle active robot every ~5 seconds (40 ticks)
+        const activeRobot = Math.floor(tickCount / 40) % 3; 
+        // Alternate frames every 4 ticks for idle animation
+        const frameSubIndex = Math.floor(tickCount / 4) % 2; 
+        
+        const frameIndex = (activeRobot * 2) + frameSubIndex;
+        const frame = robotFrames[frameIndex];
+        
+        // Calculate an X offset to make the robot swing left and right slightly
+        const xOffset = Math.round(Math.sin(tickCount / 6) * 2);
+        
+        for (let y = 0; y < ROWS; y++) {
+            for (let x = 0; x < COLS; x++) {
+                const char = frame[y]?.[x];
+                if (!char) continue;
+                
+                const targetX = x + xOffset;
+                
+                // Only draw if targetX falls squarely within the grid bounds
+                if (targetX >= 0 && targetX < COLS) {
+                    const idx = y * COLS + targetX;
+                    const isGlitch = Math.random() < 0.05;
+
+                    if (char === '#') {
+                        next[idx] = isGlitch ? BLOCK_YELLOW : BLOCK_PURPLE;
+                    } else if (char === '+') {
+                        next[idx] = isGlitch ? BLOCK_PURPLE : BLOCK_YELLOW;
+                    } else if (char === '=') {
+                        next[idx] = BLOCK_YELLOW;
+                    } else if (char === '-') {
+                        next[idx] = BLOCK_EMPTY;
+                    } else if (char === ' ') {
+                        // force dark space occasionally to keep shape readable
+                        if (Math.random() < 0.7) {
+                            next[idx] = BLOCK_EMPTY;
+                        }
+                    }
+                }
+            }
+        }
+
         return next;
       });
     }, 120); // Fast interval for a "glitchy" feel

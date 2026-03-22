@@ -279,44 +279,7 @@ export default function AboutSection() {
           </div>
         </div>
 
-        {/* ── Availability banner ── */}
-        <FadeUp delay={0.1} className="mt-20 md:mt-28">
-          <div
-            className="rounded-xl border border-white/[0.08] px-8 py-7 flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
-            style={{ background: "rgba(255,255,255,0.03)" }}
-          >
-            <div className="flex items-center gap-4">
-              {/* Green pulse dot */}
-              <span className="relative flex h-2.5 w-2.5 flex-shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400" />
-              </span>
-              <p
-                className="font-inter"
-                style={{
-                  fontSize: "clamp(14px, 1.5vw, 16px)",
-                  color: "rgba(255,255,255,0.7)",
-                }}
-              >
-                Currently open to{" "}
-                <span className="text-white font-medium">
-                  freelance projects &amp; full-time roles
-                </span>
-              </p>
-            </div>
-            <a
-              href="mailto:mohit@example.com"
-              className="btn-outline shrink-0"
-              style={{
-                fontSize: 13,
-                padding: "11px 22px",
-                whiteSpace: "nowrap",
-              }}
-            >
-              Get in Touch →
-            </a>
-          </div>
-        </FadeUp>
+
       </div>
 
       {/* ── Bottom border ── */}

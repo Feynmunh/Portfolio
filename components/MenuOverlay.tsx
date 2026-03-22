@@ -147,7 +147,7 @@ export default function MenuOverlay({ onClose }: MenuOverlayProps) {
         initial="hidden"
         animate="visible"
         exit="exit"
-        className="absolute inset-0 bg-[#0a0a0a]"
+        className="absolute inset-0 bg-black"
         style={{ transformOrigin: 'top' }}
       />
 
