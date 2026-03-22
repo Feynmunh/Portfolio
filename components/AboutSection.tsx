@@ -25,11 +25,7 @@ const SKILLS = [
   { label: "Git", category: "DevOps" },
 ];
 
-const STATS = [
-  { value: "3+", label: "Years Building" },
-  { value: "20+", label: "Projects Shipped" },
-  { value: "∞", label: "Curiosity" },
-];
+
 
 /* ── Reusable fade-up wrapper ── */
 function FadeUp({
@@ -122,8 +118,7 @@ export default function AboutSection() {
     margin: "-60px 0px",
   });
 
-  const statsRef = useRef<HTMLDivElement>(null);
-  const statsInView = useInView(statsRef, { once: true, margin: "-60px 0px" });
+
 
   return (
     <section
@@ -142,9 +137,9 @@ export default function AboutSection() {
           </span>
         </FadeUp>
 
-        {/* ── Main grid: bio left, stats right ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-16 lg:gap-24 items-start mb-24 lg:mb-32">
-          {/* ── Left: Heading + Bio ── */}
+        {/* ── Bio section ── */}
+        <div className="flex flex-col gap-16 mb-24 lg:mb-32">
+          {/* ── Heading + Bio ── */}
           <div>
             {/* Large heading */}
             <div className="mb-10">
@@ -239,43 +234,7 @@ export default function AboutSection() {
             </div>
           </div>
 
-          {/* ── Right: Stats ── */}
-          <div
-            ref={statsRef}
-            className="flex flex-row lg:flex-col gap-10 lg:gap-12 pt-2"
-          >
-            {STATS.map((stat, i) => (
-              <m.div
-                key={stat.label}
-                initial={{ opacity: 0, x: 24 }}
-                animate={
-                  statsInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 24 }
-                }
-                transition={{
-                  duration: 0.8,
-                  delay: 0.3 + i * 0.12,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="flex flex-col gap-1"
-              >
-                <span
-                  className="font-syne font-bold leading-none"
-                  style={{
-                    fontSize: "clamp(2.4rem, 4vw, 4rem)",
-                    color: "#ffffff",
-                  }}
-                >
-                  {stat.value}
-                </span>
-                <span
-                  className="font-inter text-xs tracking-widest uppercase"
-                  style={{ color: "rgba(255,255,255,0.3)" }}
-                >
-                  {stat.label}
-                </span>
-              </m.div>
-            ))}
-          </div>
+
         </div>
 
         {/* ── Divider ── */}

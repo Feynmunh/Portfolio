@@ -64,20 +64,12 @@ function GlitchMatrix() {
   }, []);
 
   return (
-    <div 
-      className="bg-[#A4EBFB] inline-flex rounded-lg overflow-hidden shadow-2xl relative"
-      style={{
-         padding: "16px",
-      }}
-    >
-      {/* Soft inner glow on the box */}
-      <div className="absolute inset-0 pointer-events-none border border-white/20 rounded-lg blend-overlay z-10" />
-
+    <div className="inline-flex relative">
       <div
         style={{
           display: "grid",
           gridTemplateColumns: `repeat(${COLS}, minmax(0, 1fr))`,
-          gap: "1px" // seamless grid block feel
+          gap: "1px" 
         }}
       >
         {grid.map((val, i) => (

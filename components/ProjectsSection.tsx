@@ -81,101 +81,64 @@ function ProjectCard({
       variants={cardVariants}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
-      className="group relative flex flex-col overflow-hidden rounded-xl border border-white/[0.07] bg-[#0a0a0a] hover:border-white/20 transition-colors duration-500"
+      className="group relative flex flex-col overflow-hidden rounded-none border border-white/[0.08] bg-[#000000] hover:border-[#B47CFF]/50 transition-all duration-500"
     >
-      {/* ── Colour accent bar ── */}
+      {/* ── Visual Frame ── */}
       <div
-        className="absolute top-0 left-0 right-0 h-px transition-all duration-500"
-        style={{
-          background: `linear-gradient(90deg, transparent, ${project.color}, transparent)`,
-          opacity: 0.6,
-        }}
-      />
-
-      {/* ── Card visual ── */}
-      <div
-        className="relative overflow-hidden"
+        className="relative overflow-hidden border-b border-white/[0.08]"
         style={{ aspectRatio: "16 / 9" }}
       >
-        {/* Gradient background */}
+        {/* Strict pixel grid pattern instead of faint gradients */}
         <div
-          className="absolute inset-0 transition-transform duration-700 group-hover:scale-105"
-          style={{
-            background: `linear-gradient(135deg, ${project.color}22 0%, ${project.accentColor}11 100%)`,
-          }}
-        />
-
-        {/* Grid pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.06]"
+          className="absolute inset-0 opacity-[0.15]"
           style={{
             backgroundImage: `
               linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
               linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)
             `,
-            backgroundSize: "32px 32px",
+            backgroundSize: "20px 20px",
           }}
         />
 
-        {/* Glowing orb
-         */}
-        <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full blur-3xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"
-          style={{ background: project.color }}
-        />
+        {/* Glitch block motif on hover */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+           <div className="absolute w-5 h-5 bg-[#B47CFF] transform -translate-y-8 -translate-x-12 animate-pulse" />
+           <div className="absolute w-5 h-5 bg-[#FFEA00] transform translate-y-6 translate-x-10 animate-bounce" />
+           <div className="absolute w-5 h-5 bg-[#FDFBF7] transform translate-y-8 -translate-x-8" style={{ animation: "pulse 1s infinite reverse" }} />
+           <div className="absolute w-5 h-5 bg-[#B47CFF] transform -translate-y-6 translate-x-16" />
+        </div>
 
         {/* Project number */}
         <div
-          className="absolute top-4 left-5 font-inter text-xs tracking-widest"
-          style={{ color: "rgba(255,255,255,0.2)" }}
+          className="absolute top-3 left-4 font-mono text-xs tracking-wider"
+          style={{ color: "rgba(255,255,255,0.4)" }}
         >
-          {String(index + 1).padStart(2, "0")}
+          [{String(index + 1).padStart(2, "0")}]
         </div>
 
         {/* Year badge */}
-        <div
-          className="absolute top-4 right-5 font-inter text-xs tracking-widest px-2.5 py-1 rounded-full border"
-          style={{
-            color: "rgba(255,255,255,0.35)",
-            borderColor: "rgba(255,255,255,0.1)",
-            background: "rgba(0,0,0,0.4)",
-          }}
-        >
+        <div className="absolute top-3 right-4 font-mono text-[10px] tracking-widest px-2 py-0.5 border border-white/20 bg-black text-white/60">
           {project.year}
         </div>
 
-        {/* Center icon placeholder */}
-        <div className="absolute inset-0 flex items-center justify-center">
+        {/* Center Monogram (Pixel style) */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div
-            className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl font-syne font-black opacity-60 group-hover:opacity-90 group-hover:scale-110 transition-all duration-500"
+            className="w-16 h-16 flex items-center justify-center text-2xl font-mono font-bold text-white/40 group-hover:text-black group-hover:bg-[#FFEA00] transition-colors duration-300 border border-white/10 group-hover:border-[#FFEA00]"
             style={{
-              background: `linear-gradient(135deg, ${project.color}44, ${project.accentColor}33)`,
-              border: `1px solid ${project.color}33`,
-              color: project.accentColor,
-              backdropFilter: "blur(8px)",
+              backdropFilter: "blur(4px)",
             }}
           >
             {project.title[0]}
           </div>
         </div>
-
-        {/* Hover overlay */}
-        <div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          style={{
-            background: `linear-gradient(135deg, ${project.color}18, transparent)`,
-          }}
-        />
       </div>
 
       {/* ── Card body ── */}
-      <div className="flex flex-col flex-1 p-6 gap-4">
+      <div className="flex flex-col flex-1 p-6 gap-5 bg-[#050505]">
         {/* Title row */}
         <div className="flex items-start justify-between gap-3">
-          <h3
-            className="font-syne font-bold text-white text-xl leading-tight group-hover:text-white transition-colors duration-300"
-            style={{ letterSpacing: "-0.01em" }}
-          >
+          <h3 className="font-syne font-bold text-white text-xl leading-tight group-hover:text-[#B47CFF] transition-colors duration-300">
             {project.title}
           </h3>
 
@@ -185,54 +148,39 @@ function ProjectCard({
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Visit ${project.title}`}
-            className="flex-shrink-0 w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-white/30 hover:text-white hover:border-white/50 transition-all duration-300 mt-0.5"
-            style={{ fontSize: 14 }}
+            className="flex-shrink-0 w-8 h-8 flex items-center justify-center text-white/50 hover:text-[#000000] hover:bg-[#FFEA00] transition-all duration-300 mt-0.5"
+            style={{ fontSize: 16 }}
           >
             ↗
           </a>
         </div>
 
         {/* Description */}
-        <p
-          className="font-inter text-sm leading-relaxed flex-1"
-          style={{ color: "rgba(255,255,255,0.45)" }}
-        >
+        <p className="font-mono text-[12px] leading-relaxed flex-1 text-white/50">
           {project.description}
         </p>
 
         {/* Category tags */}
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-2">
           {project.category.map((cat) => (
-            <span key={cat} className="tag" style={{ fontSize: 10 }}>
+            <span key={cat} className="font-mono text-[10px] text-[#000000] bg-[#FFEA00] px-2 py-0.5 font-bold uppercase tracking-wider">
               {cat}
             </span>
           ))}
         </div>
 
         {/* Tech stack */}
-        <div
-          className="pt-4 border-t flex flex-wrap gap-2"
-          style={{ borderColor: "rgba(255,255,255,0.07)" }}
-        >
+        <div className="pt-4 border-t border-white/10 flex flex-wrap gap-3">
           {project.tech.map((t) => (
             <span
               key={t}
-              className="font-inter text-[11px]"
-              style={{ color: "rgba(255,255,255,0.28)" }}
+              className="font-mono text-[10px] text-white/30 uppercase tracking-wider"
             >
               {t}
             </span>
           ))}
         </div>
       </div>
-
-      {/* Bottom accent glow */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-px opacity-0 group-hover:opacity-60 transition-opacity duration-500"
-        style={{
-          background: `linear-gradient(90deg, transparent, ${project.color}, transparent)`,
-        }}
-      />
     </m.article>
   );
 }
@@ -249,18 +197,17 @@ export default function ProjectsSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full py-28 md:py-36 px-6 md:px-10 overflow-hidden"
-      style={{ background: "#000" }}
+      className="relative w-full py-28 md:py-36 px-6 md:px-10 overflow-hidden bg-black"
     >
-      {/* ── Background grid decoration ── */}
+      {/* ── Background matrix grid decoration ── */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.025]"
+        className="absolute inset-0 pointer-events-none opacity-[0.05]"
         style={{
           backgroundImage: `
             linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px),
             linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)
           `,
-          backgroundSize: "64px 64px",
+          backgroundSize: "40px 40px",
         }}
         aria-hidden="true"
       />

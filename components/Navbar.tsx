@@ -59,10 +59,10 @@ export default function Navbar() {
         {/* ── Logo ── */}
         <Link
           href="/"
-          className="group flex items-center justify-center w-8 h-8 rounded-full border border-black/20 hover:border-black/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black transition-colors duration-300"
+          className="group flex items-center justify-center w-8 h-8 rounded-full border border-white/20 hover:border-white/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white transition-colors duration-300"
           aria-label="Home"
         >
-          <span className="font-syne font-bold text-black text-xs tracking-widest group-hover:scale-110 transition-transform duration-300 inline-block">
+          <span className="font-syne font-bold text-white text-xs tracking-widest group-hover:scale-110 transition-transform duration-300 inline-block">
             M
           </span>
         </Link>
@@ -76,10 +76,10 @@ export default function Navbar() {
                 <Link
                   href={link.href}
                   aria-current={isActive ? "page" : undefined}
-                  className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[14px] font-inter font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black transition-all duration-300 ${
+                  className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[14px] font-inter font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white transition-all duration-300 ${
                     isActive
-                      ? "bg-black/10 backdrop-blur-xl text-black"
-                      : "text-black/80 hover:text-black hover:bg-black/5"
+                      ? "bg-white/10 backdrop-blur-xl text-white"
+                      : "text-white/80 hover:text-white hover:bg-white/5"
                   }`}
                 >
                   {isActive && (
@@ -98,23 +98,23 @@ export default function Navbar() {
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
-          className="relative w-9 h-9 rounded-full border border-black/25 hover:border-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black transition-colors duration-300 flex items-center justify-center group overflow-hidden"
+          className="relative w-9 h-9 rounded-full border border-white/20 hover:border-white/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white transition-colors duration-300 flex items-center justify-center group overflow-hidden"
         >
           {/* Hover fill */}
-          <span className="absolute inset-0 rounded-full bg-black scale-0 group-hover:scale-100 transition-transform duration-400 ease-expo-out origin-center" />
+          <span className="absolute inset-0 rounded-full bg-white scale-0 group-hover:scale-100 transition-transform duration-400 ease-expo-out origin-center" />
 
           {/* Hamburger / X lines */}
           <span className="relative flex flex-col items-center justify-center gap-[5px]">
             <span
               className={`block h-px w-[18px] origin-center transition-all duration-300 ${menuOpen
-                  ? "rotate-45 translate-y-[3px] bg-white group-hover:rotate-45 group-hover:translate-y-[3px]"
-                  : "rotate-0 translate-y-0 bg-black group-hover:bg-white"
+                  ? "rotate-45 translate-y-[3px] bg-black group-hover:rotate-45 group-hover:translate-y-[3px]"
+                  : "rotate-0 translate-y-0 bg-white group-hover:bg-black"
                 }`}
             />
             <span
               className={`block h-px origin-center transition-all duration-300 ${menuOpen
-                  ? "-rotate-45 -translate-y-[4px] w-[18px] bg-white group-hover:-rotate-45 group-hover:-translate-y-[4px] group-hover:w-[18px]"
-                  : "rotate-0 w-[12px] bg-black group-hover:bg-white"
+                  ? "-rotate-45 -translate-y-[4px] w-[18px] bg-black group-hover:-rotate-45 group-hover:-translate-y-[4px] group-hover:w-[18px]"
+                  : "rotate-0 w-[12px] bg-white group-hover:bg-black"
                 }`}
             />
           </span>
