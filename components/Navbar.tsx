@@ -46,51 +46,46 @@ export default function Navbar() {
   return (
     <>
       <m.nav
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+        initial={{ y: -80, opacity: 0, x: "-50%" }}
+        animate={{ y: 0, opacity: 1, x: "-50%" }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-10 py-5 transition-all duration-500 ${
+        aria-label="Main Navigation"
+        className={`absolute top-6 left-1/2 z-50 flex items-center gap-4 md:gap-6 px-3 py-1.5 w-auto rounded-full transition-all duration-500 ${
           scrolled && !menuOpen
-            ? "bg-black/70 backdrop-blur-md border-b border-white/[0.06]"
-            : "bg-transparent"
+            ? "bg-[#FDFBF7]/70 backdrop-blur-3xl border border-white/50 shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
+            : "bg-transparent border border-transparent shadow-none"
         }`}
       >
         {/* ── Logo ── */}
         <Link
           href="/"
-          className="group flex items-center justify-center w-10 h-10 rounded-full border border-white/20 hover:border-white/60 transition-colors duration-300"
+          className="group flex items-center justify-center w-8 h-8 rounded-full border border-black/20 hover:border-black/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black transition-colors duration-300"
           aria-label="Home"
         >
-          <span className="font-syne font-bold text-white text-sm tracking-widest group-hover:scale-110 transition-transform duration-300 inline-block">
+          <span className="font-syne font-bold text-black text-xs tracking-widest group-hover:scale-110 transition-transform duration-300 inline-block">
             M
           </span>
         </Link>
 
         {/* ── Desktop Nav Links ── */}
-        <ul className="hidden md:flex items-center gap-10">
+        <ul className="hidden md:flex items-center gap-1" role="list">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="relative group text-sm font-inter tracking-wider uppercase"
+                  aria-current={isActive ? "page" : undefined}
+                  className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[14px] font-inter font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black transition-all duration-300 ${
+                    isActive
+                      ? "bg-black/10 backdrop-blur-xl text-black"
+                      : "text-black/80 hover:text-black hover:bg-black/5"
+                  }`}
                 >
-                  <span
-                    className={`transition-colors duration-300 ${
-                      isActive
-                        ? "text-white"
-                        : "text-white/50 group-hover:text-white"
-                    }`}
-                  >
-                    {link.label}
-                  </span>
-                  {/* Underline indicator */}
-                  <span
-                    className={`absolute -bottom-1 left-0 h-px bg-white transition-all duration-400 ease-expo-out ${
-                      isActive ? "w-full" : "w-0 group-hover:w-full"
-                    }`}
-                  />
+                  {isActive && (
+                    <span className="w-2 h-2 rounded-full bg-[#B294FF]" />
+                  )}
+                  {link.label}
                 </Link>
               </li>
             );
@@ -101,26 +96,26 @@ export default function Navbar() {
         <button
           onClick={() => setMenuOpen((v) => !v)}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
-          className="relative w-11 h-11 rounded-full border border-white/25 hover:border-white/70 transition-colors duration-300 flex items-center justify-center group overflow-hidden"
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
+          className="relative w-9 h-9 rounded-full border border-black/25 hover:border-black/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black transition-colors duration-300 flex items-center justify-center group overflow-hidden"
         >
           {/* Hover fill */}
-          <span className="absolute inset-0 rounded-full bg-white scale-0 group-hover:scale-100 transition-transform duration-400 ease-expo-out origin-center" />
+          <span className="absolute inset-0 rounded-full bg-black scale-0 group-hover:scale-100 transition-transform duration-400 ease-expo-out origin-center" />
 
           {/* Hamburger / X lines */}
           <span className="relative flex flex-col items-center justify-center gap-[5px]">
             <span
-              className={`block h-px w-[18px] origin-center transition-all duration-300 ${
-                menuOpen
-                  ? "rotate-45 translate-y-[3px] bg-black"
-                  : "rotate-0 translate-y-0 bg-white group-hover:bg-black"
-              }`}
+              className={`block h-px w-[18px] origin-center transition-all duration-300 ${menuOpen
+                  ? "rotate-45 translate-y-[3px] bg-white group-hover:rotate-45 group-hover:translate-y-[3px]"
+                  : "rotate-0 translate-y-0 bg-black group-hover:bg-white"
+                }`}
             />
             <span
-              className={`block h-px origin-center transition-all duration-300 ${
-                menuOpen
-                  ? "-rotate-45 -translate-y-[4px] w-[18px] bg-black"
-                  : "rotate-0 w-[12px] bg-white group-hover:bg-black"
-              }`}
+              className={`block h-px origin-center transition-all duration-300 ${menuOpen
+                  ? "-rotate-45 -translate-y-[4px] w-[18px] bg-white group-hover:-rotate-45 group-hover:-translate-y-[4px] group-hover:w-[18px]"
+                  : "rotate-0 w-[12px] bg-black group-hover:bg-white"
+                }`}
             />
           </span>
         </button>
