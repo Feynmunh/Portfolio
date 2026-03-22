@@ -1,5 +1,4 @@
-/* ── Fonts ── */
-@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap");
+/* ── Fonts are loaded via next/font/google in layout.tsx (self-hosted, no render-blocking) ── */
 
 @tailwind base;
 @tailwind components;
@@ -64,9 +63,11 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Custom Cursor ── */
-* {
-    cursor: none !important;
+/* ── Custom Cursor (only on devices with a fine pointer, not touch) ── */
+@media (pointer: fine) {
+    * {
+        cursor: none !important;
+    }
 }
 
 .cursor-dot {
@@ -311,4 +312,20 @@ body {
 .link-underline:hover::after {
     transform: scaleX(1);
     transform-origin: left;
+}
+
+/* ── Scroll indicator animation (used by HeroSection) ── */
+@keyframes scrollLine {
+    0% {
+        transform: translateY(-100%);
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
 }

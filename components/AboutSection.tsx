@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { m, useInView } from "framer-motion";
 
 /* ── Skills data ── */
 const SKILLS = [
@@ -45,7 +45,7 @@ function FadeUp({
   const inView = useInView(ref, { once: true, margin: "-80px 0px" });
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
@@ -57,7 +57,7 @@ function FadeUp({
       className={className}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -76,13 +76,13 @@ function RevealHeading({
 
   return (
     <div ref={ref} style={{ overflow: "hidden" }} className={className}>
-      <motion.div
+      <m.div
         initial={{ y: "105%" }}
         animate={inView ? { y: "0%" } : { y: "105%" }}
         transition={{ duration: 1.0, delay, ease: [0.22, 1, 0.36, 1] }}
       >
         {children}
-      </motion.div>
+      </m.div>
     </div>
   );
 }
@@ -98,7 +98,7 @@ function SkillPill({
   inView: boolean;
 }) {
   return (
-    <motion.span
+    <m.span
       initial={{ opacity: 0, scale: 0.85 }}
       animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.85 }}
       transition={{
@@ -110,7 +110,7 @@ function SkillPill({
       style={{ cursor: "none" }}
     >
       {label}
-    </motion.span>
+    </m.span>
   );
 }
 
@@ -245,7 +245,7 @@ export default function AboutSection() {
             className="flex flex-row lg:flex-col gap-10 lg:gap-12 pt-2"
           >
             {STATS.map((stat, i) => (
-              <motion.div
+              <m.div
                 key={stat.label}
                 initial={{ opacity: 0, x: 24 }}
                 animate={
@@ -273,7 +273,7 @@ export default function AboutSection() {
                 >
                   {stat.label}
                 </span>
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>

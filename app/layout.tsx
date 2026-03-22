@@ -4,6 +4,7 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import Navbar from "@/components/Navbar";
 import CustomCursor from "@/components/CustomCursor";
+import { LazyMotion, domAnimation } from "framer-motion";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -38,11 +39,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${syne.variable} ${inter.variable}`}>
       <body className="bg-black text-white antialiased">
-        <CustomCursor />
-        <SmoothScroll>
-          <Navbar />
-          <main>{children}</main>
-        </SmoothScroll>
+        <LazyMotion features={domAnimation} strict>
+          <CustomCursor />
+          <SmoothScroll>
+            <Navbar />
+            <main>{children}</main>
+          </SmoothScroll>
+        </LazyMotion>
       </body>
     </html>
   );

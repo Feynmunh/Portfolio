@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Link from "next/link";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { m, useInView, AnimatePresence } from "framer-motion";
 import { projects, categories } from "@/data/projects";
 
 /* ── Animation variants ── */
@@ -115,7 +115,7 @@ function ProjectCard({
   index: number;
 }) {
   return (
-    <motion.article
+    <m.article
       layout
       custom={index}
       variants={cardVariants}
@@ -123,7 +123,7 @@ function ProjectCard({
       animate="visible"
       exit="exit"
       className="group relative flex flex-col rounded-2xl overflow-hidden border border-white/[0.07] bg-[#0a0a0a] hover:border-white/20 transition-colors duration-500"
-      style={{ willChange: "transform, opacity" }}
+      style={{ }}
     >
       {/* top accent line */}
       <div
@@ -290,7 +290,7 @@ function ProjectCard({
           background: `linear-gradient(90deg, transparent, ${project.color}, transparent)`,
         }}
       />
-    </motion.article>
+    </m.article>
   );
 }
 
@@ -332,7 +332,7 @@ export default function ProjectsPage() {
         />
 
         {/* eyebrow */}
-        <motion.div
+        <m.div
           custom={0}
           variants={fadeUp}
           initial="hidden"
@@ -349,13 +349,13 @@ export default function ProjectsPage() {
           <span className="font-inter text-xs tracking-widest uppercase text-white/40">
             Projects
           </span>
-        </motion.div>
+        </m.div>
 
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           {/* Heading */}
           <div>
             <div style={{ overflow: "hidden" }}>
-              <motion.h1
+              <m.h1
                 custom={0.15}
                 variants={headingReveal}
                 initial="hidden"
@@ -368,9 +368,9 @@ export default function ProjectsPage() {
                 }}
               >
                 Projects
-              </motion.h1>
+              </m.h1>
             </div>
-            <motion.p
+            <m.p
               custom={0.3}
               variants={fadeUp}
               initial="hidden"
@@ -384,11 +384,11 @@ export default function ProjectsPage() {
               Intelligent systems, fullstack products, and developer tools.
               Every project starts with a clear problem and ends with something
               real people use.
-            </motion.p>
+            </m.p>
           </div>
 
           {/* Stat */}
-          <motion.div
+          <m.div
             custom={0.4}
             variants={fadeUp}
             initial="hidden"
@@ -407,11 +407,11 @@ export default function ProjectsPage() {
             >
               Projects built
             </span>
-          </motion.div>
+          </m.div>
         </div>
 
         {/* Divider */}
-        <motion.div
+        <m.div
           initial={{ scaleX: 0, originX: 0 }}
           animate={headerInView ? { scaleX: 1 } : { scaleX: 0 }}
           transition={{ duration: 1, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
@@ -422,7 +422,7 @@ export default function ProjectsPage() {
 
       {/* ── Filter Bar ── */}
       <div className="max-w-7xl mx-auto px-6 md:px-10 mb-10 md:mb-14">
-        <motion.div
+        <m.div
           variants={pageVariants}
           initial="hidden"
           animate="visible"
@@ -437,33 +437,31 @@ export default function ProjectsPage() {
               count={getCategoryCount(cat)}
             />
           ))}
-        </motion.div>
+        </m.div>
       </div>
 
       {/* ── Project Grid ── */}
-      <motion.div layout className="max-w-7xl mx-auto px-6 md:px-10">
+      <m.div className="max-w-7xl mx-auto px-6 md:px-10">
         {/* Results count */}
-        <motion.p
-          layout
+        <m.p
           className="font-inter text-xs tracking-widest uppercase mb-8"
           style={{ color: "rgba(255,255,255,0.2)" }}
         >
           Showing {filtered.length} of {projects.length}
-        </motion.p>
+        </m.p>
 
         <AnimatePresence mode="sync">
           {filtered.length > 0 ? (
-            <motion.div
+            <m.div
               key={activeFilter}
-              layout
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
             >
               {filtered.map((project, i) => (
                 <ProjectCard key={project.id} project={project} index={i} />
               ))}
-            </motion.div>
+            </m.div>
           ) : (
-            <motion.div
+            <m.div
               key="empty"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -489,14 +487,14 @@ export default function ProjectsPage() {
               >
                 View all
               </button>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
-      </motion.div>
+      </m.div>
 
       {/* ── Bottom CTA ── */}
       <div className="max-w-7xl mx-auto px-6 md:px-10 mt-24 md:mt-32">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
@@ -544,7 +542,7 @@ export default function ProjectsPage() {
               Read the blog
             </Link>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </div>
   );

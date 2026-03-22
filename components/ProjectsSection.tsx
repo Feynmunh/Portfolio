@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Link from "next/link";
-import { motion, useInView } from "framer-motion";
+import { m, useInView } from "framer-motion";
 import { projects } from "@/data/projects";
 
 /* ── Animation Variants ── */
@@ -76,13 +76,12 @@ function ProjectCard({
   inView: boolean;
 }) {
   return (
-    <motion.article
+    <m.article
       custom={index}
       variants={cardVariants}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
       className="group relative flex flex-col overflow-hidden rounded-xl border border-white/[0.07] bg-[#0a0a0a] hover:border-white/20 transition-colors duration-500"
-      style={{ willChange: "transform, opacity" }}
     >
       {/* ── Colour accent bar ── */}
       <div
@@ -234,7 +233,7 @@ function ProjectCard({
           background: `linear-gradient(90deg, transparent, ${project.color}, transparent)`,
         }}
       />
-    </motion.article>
+    </m.article>
   );
 }
 
@@ -269,7 +268,7 @@ export default function ProjectsSection() {
       <div className="relative max-w-6xl mx-auto">
         {/* ── Section heading ── */}
         <div ref={headingRef}>
-          <motion.div
+          <m.div
             variants={fadeUpVariants}
             initial="hidden"
             animate={headingInView ? "visible" : "hidden"}
@@ -282,18 +281,18 @@ export default function ProjectsSection() {
             >
               Selected Work
             </span>
-            <motion.span
+            <m.span
               variants={lineVariants}
               initial="hidden"
               animate={headingInView ? "visible" : "hidden"}
               className="flex-1 h-px max-w-[60px]"
               style={{ background: "rgba(255,255,255,0.12)", display: "block" }}
             />
-          </motion.div>
+          </m.div>
 
           {/* Heading with overflow-hidden clip */}
           <div style={{ overflow: "hidden" }}>
-            <motion.h2
+            <m.h2
               variants={headingVariants}
               initial="hidden"
               animate={headingInView ? "visible" : "hidden"}
@@ -304,12 +303,12 @@ export default function ProjectsSection() {
               }}
             >
               Projects
-            </motion.h2>
+            </m.h2>
           </div>
 
           {/* Sub-heading row */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
-            <motion.p
+            <m.p
               variants={fadeUpVariants}
               initial="hidden"
               animate={headingInView ? "visible" : "hidden"}
@@ -322,9 +321,9 @@ export default function ProjectsSection() {
             >
               A selection of things I've built — intelligent systems, fullstack
               products, and developer tools where AI does the heavy lifting.
-            </motion.p>
+            </m.p>
 
-            <motion.div
+            <m.div
               variants={fadeUpVariants}
               initial="hidden"
               animate={headingInView ? "visible" : "hidden"}
@@ -340,7 +339,7 @@ export default function ProjectsSection() {
                   →
                 </span>
               </Link>
-            </motion.div>
+            </m.div>
           </div>
         </div>
 
@@ -360,7 +359,7 @@ export default function ProjectsSection() {
         </div>
 
         {/* ── Bottom CTA ── */}
-        <motion.div
+        <m.div
           variants={fadeUpVariants}
           initial="hidden"
           animate={gridInView ? "visible" : "hidden"}
@@ -384,7 +383,7 @@ export default function ProjectsSection() {
               }}
             />
           </Link>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

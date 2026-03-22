@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { m, useInView } from "framer-motion";
 import Link from "next/link";
 
 /* ── Timeline data ── */
@@ -130,7 +130,7 @@ function FadeUp({
   const inView = useInView(ref, { once: true, margin: "-72px 0px" });
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       initial={{ opacity: 0, y: 36 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -138,7 +138,7 @@ function FadeUp({
       className={className}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -156,13 +156,13 @@ function RevealText({
 
   return (
     <div ref={ref} style={{ overflow: "hidden" }} className={className}>
-      <motion.div
+      <m.div
         initial={{ y: "108%" }}
         animate={inView ? { y: "0%" } : {}}
         transition={{ duration: 1.0, delay, ease: [0.22, 1, 0.36, 1] }}
       >
         {children}
-      </motion.div>
+      </m.div>
     </div>
   );
 }
@@ -203,7 +203,7 @@ function SkillBar({
         className="relative w-full rounded-full overflow-hidden"
         style={{ height: 2, background: "rgba(255,255,255,0.07)" }}
       >
-        <motion.div
+        <m.div
           initial={{ scaleX: 0, originX: 0 }}
           animate={inView ? { scaleX: 1 } : {}}
           transition={{
@@ -233,7 +233,7 @@ function TimelineItem({
   inView: boolean;
 }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, x: -32 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
       transition={{
@@ -325,7 +325,7 @@ function TimelineItem({
           ))}
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -340,7 +340,7 @@ function ValueCard({
   inView: boolean;
 }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 32 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{
@@ -366,7 +366,7 @@ function ValueCard({
       >
         {item.body}
       </p>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -384,7 +384,7 @@ function SkillGroup({
   return (
     <div ref={groupRef} className="flex flex-col gap-6">
       {/* Category label */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0, x: -16 }}
         animate={groupInView ? { opacity: 1, x: 0 } : {}}
         transition={{
@@ -404,7 +404,7 @@ function SkillGroup({
         >
           {group.category}
         </span>
-      </motion.div>
+      </m.div>
 
       {/* Skill bars */}
       <div className="flex flex-col gap-4">

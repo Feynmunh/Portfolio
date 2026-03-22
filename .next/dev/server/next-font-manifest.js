@@ -1,1 +1,1 @@
-self.__NEXT_FONT_MANIFEST="{\n  \"app\": {},\n  \"appUsingSizeAdjust\": false,\n  \"pages\": {},\n  \"pagesUsingSizeAdjust\": false\n}"
+self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/Users/mohitsharma/Downloads/MyPortfolio/app/layout\":[\"static/media/e4af272ccee01ff0-s.p.woff2\",\"static/media/8a1d8947e5852e30-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"

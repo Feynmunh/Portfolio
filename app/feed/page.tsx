@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Link from "next/link";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { m, useInView, AnimatePresence } from "framer-motion";
 import { feedPosts, categories, type Category } from "@/data/feed";
 
 /* ── Category color map ── */
@@ -123,7 +123,7 @@ function FeaturedCard({ post }: { post: (typeof feedPosts)[0] }) {
   const color = CATEGORY_COLORS[post.category] ?? "#ffffff";
 
   return (
-    <motion.article
+    <m.article
       ref={ref}
       initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -284,7 +284,7 @@ function FeaturedCard({ post }: { post: (typeof feedPosts)[0] }) {
           background: `linear-gradient(90deg, transparent, ${color}, transparent)`,
         }}
       />
-    </motion.article>
+    </m.article>
   );
 }
 
@@ -299,7 +299,7 @@ function PostCard({
   const color = CATEGORY_COLORS[post.category] ?? "#ffffff";
 
   return (
-    <motion.article
+    <m.article
       layout
       custom={index}
       variants={cardVariants}
@@ -307,7 +307,7 @@ function PostCard({
       animate="visible"
       exit="exit"
       className="group relative flex flex-col rounded-xl overflow-hidden border border-white/[0.07] bg-[#0a0a0a] hover:border-white/20 transition-colors duration-500 cursor-none"
-      style={{ willChange: "transform, opacity" }}
+      style={{ }}
     >
       {/* Top accent */}
       <div
@@ -459,7 +459,7 @@ function PostCard({
           background: `linear-gradient(90deg, transparent, ${color}, transparent)`,
         }}
       />
-    </motion.article>
+    </m.article>
   );
 }
 
@@ -505,7 +505,7 @@ export default function FeedPage() {
 
         <div className="max-w-6xl mx-auto">
           {/* Breadcrumb */}
-          <motion.div
+          <m.div
             custom={0}
             variants={fadeUp}
             initial="hidden"
@@ -522,13 +522,13 @@ export default function FeedPage() {
             <span className="font-inter text-xs tracking-widest uppercase text-white/38">
               Feed
             </span>
-          </motion.div>
+          </m.div>
 
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
             {/* Heading */}
             <div>
               <div style={{ overflow: "hidden" }}>
-                <motion.h1
+                <m.h1
                   custom={0.1}
                   variants={headingReveal}
                   initial="hidden"
@@ -541,10 +541,10 @@ export default function FeedPage() {
                   }}
                 >
                   Feed
-                </motion.h1>
+                </m.h1>
               </div>
 
-              <motion.p
+              <m.p
                 custom={0.28}
                 variants={fadeUp}
                 initial="hidden"
@@ -557,11 +557,11 @@ export default function FeedPage() {
               >
                 Thoughts on AI development, fullstack engineering, product
                 design, and whatever else I find worth writing about.
-              </motion.p>
+              </m.p>
             </div>
 
             {/* Stats */}
-            <motion.div
+            <m.div
               custom={0.4}
               variants={fadeUp}
               initial="hidden"
@@ -602,7 +602,7 @@ export default function FeedPage() {
                   Topics
                 </span>
               </div>
-            </motion.div>
+            </m.div>
           </div>
         </div>
 
@@ -613,7 +613,7 @@ export default function FeedPage() {
       {/* ══ FEATURED (only shown when All filter active) ══ */}
       <AnimatePresence>
         {activeFilter === "All" && featuredPosts.length > 0 && (
-          <motion.section
+          <m.section
             key="featured"
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
@@ -642,7 +642,7 @@ export default function FeedPage() {
                 <FeaturedCard key={post.id} post={post} />
               ))}
             </div>
-          </motion.section>
+          </m.section>
         )}
       </AnimatePresence>
 
@@ -663,7 +663,7 @@ export default function FeedPage() {
             />
           </div>
 
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
@@ -678,28 +678,26 @@ export default function FeedPage() {
                 count={getCategoryCount(cat)}
               />
             ))}
-          </motion.div>
+          </m.div>
         </div>
       </div>
 
       {/* ══ POSTS GRID ══ */}
       <div className="max-w-6xl mx-auto px-6 md:px-10">
         {/* Count */}
-        <motion.p
-          layout
+        <m.p
           className="font-inter text-xs tracking-widest uppercase mb-8"
           style={{ color: "rgba(255,255,255,0.18)" }}
         >
           {filtered.length === feedPosts.length
             ? `All ${feedPosts.length} posts`
             : `${filtered.length} of ${feedPosts.length} posts`}
-        </motion.p>
+        </m.p>
 
         <AnimatePresence mode="sync">
           {filtered.length > 0 ? (
-            <motion.div
+            <m.div
               key={activeFilter}
-              layout
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
             >
               {(activeFilter === "All"
@@ -708,9 +706,9 @@ export default function FeedPage() {
               ).map((post, i) => (
                 <PostCard key={post.id} post={post} index={i} />
               ))}
-            </motion.div>
+            </m.div>
           ) : (
-            <motion.div
+            <m.div
               key="empty"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -737,14 +735,14 @@ export default function FeedPage() {
               >
                 View all posts
               </button>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </div>
 
       {/* ══ NEWSLETTER / CTA BAND ══ */}
       <div className="max-w-6xl mx-auto px-6 md:px-10 mt-24 md:mt-32">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 36 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
@@ -837,7 +835,7 @@ export default function FeedPage() {
               </p>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
 
       {/* ══ BOTTOM LINKS ══ */}

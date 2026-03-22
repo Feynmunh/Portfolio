@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 interface MenuOverlayProps {
   onClose: () => void
@@ -130,7 +130,7 @@ export default function MenuOverlay({ onClose }: MenuOverlayProps) {
   }, [onClose])
 
   return (
-    <motion.div
+    <m.div
       ref={overlayRef}
       variants={overlayVariants}
       initial="hidden"
@@ -142,7 +142,7 @@ export default function MenuOverlay({ onClose }: MenuOverlayProps) {
       aria-label="Navigation menu"
     >
       {/* ── Background Panel ── */}
-      <motion.div
+      <m.div
         variants={bgPanelVariants}
         initial="hidden"
         animate="visible"
@@ -163,7 +163,7 @@ export default function MenuOverlay({ onClose }: MenuOverlayProps) {
       {/* ── Content ── */}
       <div className="relative flex flex-col h-full">
         {/* ── Header ── */}
-        <motion.div
+        <m.div
           variants={headerVariants}
           initial="hidden"
           animate="visible"
@@ -194,10 +194,10 @@ export default function MenuOverlay({ onClose }: MenuOverlayProps) {
               <span className="block h-px w-[18px] origin-center -rotate-45 -translate-y-[4px] bg-white group-hover:bg-black transition-colors duration-300" />
             </span>
           </button>
-        </motion.div>
+        </m.div>
 
         {/* ── Top Divider ── */}
-        <motion.div
+        <m.div
           variants={dividerVariants}
           initial="hidden"
           animate="visible"
@@ -210,7 +210,7 @@ export default function MenuOverlay({ onClose }: MenuOverlayProps) {
         <nav className="flex-1 flex flex-col justify-center px-6 md:px-10 py-4" aria-label="Main navigation">
           {menuItems.map((item, i) => (
             <div key={item.href}>
-              <motion.div
+              <m.div
                 variants={itemVariants}
                 initial="hidden"
                 animate="visible"
@@ -257,10 +257,10 @@ export default function MenuOverlay({ onClose }: MenuOverlayProps) {
                     </span>
                   </div>
                 </Link>
-              </motion.div>
+              </m.div>
 
               {/* Divider after each item */}
-              <motion.div
+              <m.div
                 variants={dividerVariants}
                 initial="hidden"
                 animate="visible"
@@ -273,7 +273,7 @@ export default function MenuOverlay({ onClose }: MenuOverlayProps) {
         </nav>
 
         {/* ── Footer ── */}
-        <motion.div
+        <m.div
           variants={footerVariants}
           initial="hidden"
           animate="visible"
@@ -325,9 +325,9 @@ export default function MenuOverlay({ onClose }: MenuOverlayProps) {
               Twitter
             </a>
           </div>
-        </motion.div>
+        </m.div>
       </div>
-    </motion.div>
+    </m.div>
   )
 }
 

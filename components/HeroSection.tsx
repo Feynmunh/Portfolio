@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { m, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 /* ── Floating image data ── */
 interface FloatingImageConfig {
@@ -162,7 +162,7 @@ function FloatingImage({
   );
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, scale: 0.75, rotate: config.rotate }}
       animate={{ opacity: 1, scale: 1, rotate: config.rotate }}
       transition={{
@@ -181,7 +181,6 @@ function FloatingImage({
         background: config.gradient,
         borderRadius: config.borderRadius,
         boxShadow: "0 24px 80px rgba(0,0,0,0.55), 0 4px 16px rgba(0,0,0,0.3)",
-        willChange: "transform",
         zIndex: 0,
       }}
     >
@@ -196,14 +195,14 @@ function FloatingImage({
           pointerEvents: "none",
         }}
       />
-    </motion.div>
+    </m.div>
   );
 }
 
 /* ── Scroll indicator ── */
 function ScrollIndicator() {
   return (
-    <motion.div
+    <m.div
       variants={SCROLL_VARIANTS}
       initial="hidden"
       animate="visible"
@@ -227,24 +226,7 @@ function ScrollIndicator() {
           }}
         />
       </div>
-
-      <style jsx>{`
-        @keyframes scrollLine {
-          0% {
-            transform: translateY(-100%);
-            opacity: 1;
-          }
-          50% {
-            transform: translateY(0%);
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(100%);
-            opacity: 0;
-          }
-        }
-      `}</style>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -309,7 +291,7 @@ export default function HeroSection() {
         style={{ pointerEvents: "none" }}
       >
         {/* Small eyebrow label */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, letterSpacing: "0.2em" }}
           animate={{ opacity: 1, letterSpacing: "0.35em" }}
           transition={{ duration: 1.1, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
@@ -321,7 +303,7 @@ export default function HeroSection() {
           }}
         >
           Portfolio — 2025
-        </motion.div>
+        </m.div>
 
         {/* ── MOHIT — letter-by-letter clip reveal ── */}
         <div
@@ -334,7 +316,7 @@ export default function HeroSection() {
               key={i}
               style={{ overflow: "hidden", display: "inline-block" }}
             >
-              <motion.span
+              <m.span
                 custom={i}
                 variants={LETTER_VARIANTS}
                 initial="hidden"
@@ -350,13 +332,13 @@ export default function HeroSection() {
                 }}
               >
                 {letter}
-              </motion.span>
+              </m.span>
             </div>
           ))}
         </div>
 
         {/* ── Subtitle ── */}
-        <motion.div
+        <m.div
           variants={SUBTITLE_VARIANTS}
           initial="hidden"
           animate="visible"
@@ -394,10 +376,10 @@ export default function HeroSection() {
               flexShrink: 0,
             }}
           />
-        </motion.div>
+        </m.div>
 
         {/* ── CTA row ── */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.05, ease: [0.22, 1, 0.36, 1] }}
@@ -419,14 +401,14 @@ export default function HeroSection() {
           >
             About Me
           </a>
-        </motion.div>
+        </m.div>
       </div>
 
       {/* ── Scroll Indicator ── */}
       <ScrollIndicator />
 
       {/* ── Corner coordinates (decorative) ── */}
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.6, duration: 0.8 }}
@@ -439,9 +421,9 @@ export default function HeroSection() {
         aria-hidden="true"
       >
         28.6139° N · 77.2090° E
-      </motion.div>
+      </m.div>
 
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.6, duration: 0.8 }}
@@ -454,7 +436,7 @@ export default function HeroSection() {
         aria-hidden="true"
       >
         © 2025
-      </motion.div>
+      </m.div>
     </section>
   );
 }

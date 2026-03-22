@@ -18,21 +18,13 @@ export default function SmoothScroll({
       smoothWheel: true,
       wheelMultiplier: 0.9,
       touchMultiplier: 1.5,
+      autoRaf: true, // Lenis handles its own rAF — no manual loop needed
     });
 
     lenisRef.current = lenis;
 
     // Expose lenis instance globally so other components can use it
     (window as typeof window & { lenis: Lenis }).lenis = lenis;
-
-    let rafId: number;
-
-    function raf(time: number) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
-
-    rafId = requestAnimationFrame(raf);
 
     // Pause scroll when menu is open
     const handleMenuOpen = () => lenis.stop();
@@ -42,7 +34,6 @@ export default function SmoothScroll({
     window.addEventListener("menu:close", handleMenuClose);
 
     return () => {
-      cancelAnimationFrame(rafId);
       lenis.destroy();
       window.removeEventListener("menu:open", handleMenuOpen);
       window.removeEventListener("menu:close", handleMenuClose);
