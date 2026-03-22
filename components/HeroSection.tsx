@@ -1,104 +1,194 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { m, useMotionValue, useSpring, useTransform } from "framer-motion";
 
-/* ── Floating image data ── */
-interface FloatingImageConfig {
+/* ── Infinite canvas tile data ── */
+interface FloatingTileConfig {
   id: number;
-  left: string;
-  top: string;
-  width: number;
-  height: number;
-  moveX: number;
-  moveY: number;
+  x: number;
+  y: number;
+  size: number;
   rotate: number;
   gradient: string;
   delay: number;
   borderRadius: number;
-  initialScale?: number;
 }
 
-const FLOATING_IMAGES: FloatingImageConfig[] = [
+const TILE_SIZE = 210;
+const TILE_COUNT = 8;
+const CANVAS_PADDING = 100;
+const MAX_POSITION_ATTEMPTS = 120;
+const CANVAS_WIDTH = 3000;
+const CANVAS_HEIGHT = 2200;
+const NO_TILE_BUFFER = 44;
+const TILE_GAP_MIN = 80;
+const TILE_GAP_MAX = 300;
+
+type NoTileZone = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+const NO_TILE_ZONES: NoTileZone[] = [];
+
+const TILE_STYLES = [
   {
-    id: 1,
-    left: "-4%",
-    top: "8%",
-    width: 180,
-    height: 230,
-    moveX: 55,
-    moveY: 35,
-    rotate: -4,
+    rotate: 90,
     gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-    delay: 0.5,
-    borderRadius: 6,
+    borderRadius: 8,
   },
   {
-    id: 2,
-    left: "68%",
-    top: "4%",
-    width: 230,
-    height: 160,
-    moveX: 70,
-    moveY: 50,
-    rotate: 3,
+    rotate: 90,
     gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-    delay: 0.65,
-    borderRadius: 6,
+    borderRadius: 8,
   },
   {
-    id: 3,
-    left: "78%",
-    top: "52%",
-    width: 160,
-    height: 210,
-    moveX: 45,
-    moveY: 60,
-    rotate: 5,
+    rotate: 90,
     gradient: "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
-    delay: 0.8,
-    borderRadius: 6,
+    borderRadius: 8,
   },
   {
-    id: 4,
-    left: "-2%",
-    top: "58%",
-    width: 150,
-    height: 180,
-    moveX: 60,
-    moveY: 40,
-    rotate: -6,
+    rotate: 90,
     gradient: "linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)",
-    delay: 0.7,
-    borderRadius: 6,
+    borderRadius: 8,
   },
   {
-    id: 5,
-    left: "42%",
-    top: "72%",
-    width: 140,
-    height: 140,
-    moveX: 80,
-    moveY: 30,
-    rotate: 8,
+    rotate: 90,
     gradient: "linear-gradient(135deg, #fa709a 0%, #fee140 100%)",
-    delay: 0.9,
-    borderRadius: 999,
+    borderRadius: 8,
   },
   {
-    id: 6,
-    left: "30%",
-    top: "-3%",
-    width: 120,
-    height: 120,
-    moveX: 40,
-    moveY: 55,
-    rotate: -3,
+    rotate: 90,
     gradient: "linear-gradient(135deg, #f7971e 0%, #ffd200 100%)",
-    delay: 0.6,
-    borderRadius: 999,
+    borderRadius: 8,
   },
-];
+] as const;
+
+function createSeededRandom(seed: number) {
+  let value = seed;
+  return () => {
+    value = (value * 1664525 + 1013904223) >>> 0;
+    return value / 4294967296;
+  };
+}
+
+function intersectsNoTileZone(x: number, y: number, size: number) {
+  const left = x - NO_TILE_BUFFER;
+  const top = y - NO_TILE_BUFFER;
+  const right = x + size + NO_TILE_BUFFER;
+  const bottom = y + size + NO_TILE_BUFFER;
+
+  return NO_TILE_ZONES.some((zone) => {
+    const zoneLeft = zone.x;
+    const zoneTop = zone.y;
+    const zoneRight = zone.x + zone.width;
+    const zoneBottom = zone.y + zone.height;
+
+    return !(
+      right < zoneLeft ||
+      left > zoneRight ||
+      bottom < zoneTop ||
+      top > zoneBottom
+    );
+  });
+}
+
+function intersectsWithGap(
+  x: number,
+  y: number,
+  size: number,
+  other: FloatingTileConfig,
+  gap: number,
+) {
+  const halfGap = gap / 2;
+
+  const aLeft = x - halfGap;
+  const aTop = y - halfGap;
+  const aRight = x + size + halfGap;
+  const aBottom = y + size + halfGap;
+
+  const bLeft = other.x - halfGap;
+  const bTop = other.y - halfGap;
+  const bRight = other.x + other.size + halfGap;
+  const bBottom = other.y + other.size + halfGap;
+
+  return !(aRight <= bLeft || aLeft >= bRight || aBottom <= bTop || aTop >= bBottom);
+}
+
+const INFINITE_TILES: FloatingTileConfig[] = (() => {
+  const rand = createSeededRandom(20260322);
+  const placedTiles: FloatingTileConfig[] = [];
+  const placedTileGaps: number[] = [];
+
+  // Spawn around hero-visible region while keeping enough spread in every direction.
+  const minX = CANVAS_WIDTH / 2 - 1020;
+  const maxX = CANVAS_WIDTH / 2 + 1020 - TILE_SIZE;
+  const minY = CANVAS_HEIGHT / 2 - 760;
+  const maxY = CANVAS_HEIGHT / 2 + 760 - TILE_SIZE;
+
+  for (let index = 0; index < TILE_COUNT; index += 1) {
+    const style = TILE_STYLES[index % TILE_STYLES.length];
+    let x = CANVAS_WIDTH / 2;
+    let y = CANVAS_HEIGHT / 2;
+    let placed = false;
+
+    const desiredGap = TILE_GAP_MIN + rand() * (TILE_GAP_MAX - TILE_GAP_MIN);
+
+    for (let attempt = 0; attempt < MAX_POSITION_ATTEMPTS; attempt += 1) {
+      const candidateX = minX + rand() * (maxX - minX);
+      const candidateY = minY + rand() * (maxY - minY);
+
+      const outsideProtectedZones = !intersectsNoTileZone(candidateX, candidateY, TILE_SIZE);
+      if (!outsideProtectedZones) {
+        continue;
+      }
+
+      const adaptiveGap = Math.max(TILE_GAP_MIN, desiredGap - attempt * 1.6);
+      const hasCollision = placedTiles.some((tile, tileIndex) => {
+        const pairedGap = (adaptiveGap + (placedTileGaps[tileIndex] ?? TILE_GAP_MIN)) / 2;
+        return intersectsWithGap(candidateX, candidateY, TILE_SIZE, tile, pairedGap);
+      });
+
+      if (!hasCollision) {
+        x = candidateX;
+        y = candidateY;
+        placedTileGaps.push(adaptiveGap);
+        placed = true;
+        break;
+      }
+    }
+
+    if (!placed) {
+      // Last resort: random visible placement that only respects protected zones.
+      for (let attempt = 0; attempt < MAX_POSITION_ATTEMPTS; attempt += 1) {
+        const fallbackX = minX + rand() * (maxX - minX);
+        const fallbackY = minY + rand() * (maxY - minY);
+        if (!intersectsNoTileZone(fallbackX, fallbackY, TILE_SIZE)) {
+          x = fallbackX;
+          y = fallbackY;
+          placedTileGaps.push(TILE_GAP_MIN);
+          break;
+        }
+      }
+    }
+
+    placedTiles.push({
+      id: index + 1,
+      x,
+      y,
+      size: TILE_SIZE,
+      rotate: style.rotate,
+      gradient: style.gradient,
+      borderRadius: style.borderRadius,
+      delay: 0.15 + rand() * 0.45,
+    });
+  }
+
+  return placedTiles;
+})();
 
 /* ── Letter variants ── */
 const LETTER_VARIANTS = {
@@ -143,24 +233,9 @@ const SCROLL_VARIANTS = {
 /* ── FloatingImage sub-component ── */
 function FloatingImage({
   config,
-  springX,
-  springY,
 }: {
-  config: FloatingImageConfig;
-  springX: ReturnType<typeof useSpring>;
-  springY: ReturnType<typeof useSpring>;
+  config: FloatingTileConfig;
 }) {
-  const translateX = useTransform(
-    springX,
-    [-1, 1],
-    [-config.moveX, config.moveX],
-  );
-  const translateY = useTransform(
-    springY,
-    [-1, 1],
-    [-config.moveY, config.moveY],
-  );
-
   return (
     <m.div
       initial={{ opacity: 0, scale: 0.75, rotate: config.rotate }}
@@ -172,12 +247,10 @@ function FloatingImage({
       }}
       style={{
         position: "absolute",
-        left: config.left,
-        top: config.top,
-        width: config.width,
-        height: config.height,
-        x: translateX,
-        y: translateY,
+        left: config.x,
+        top: config.y,
+        width: config.size,
+        height: config.size,
         background: config.gradient,
         borderRadius: config.borderRadius,
         boxShadow: "0 24px 80px rgba(0,0,0,0.55), 0 4px 16px rgba(0,0,0,0.3)",
@@ -232,15 +305,49 @@ function ScrollIndicator() {
 
 /* ── Main HeroSection ── */
 export default function HeroSection() {
-  const containerRef = useRef<HTMLElement>(null);
-
   /* ── Mouse tracking ── */
   const rawX = useMotionValue(0);
   const rawY = useMotionValue(0);
 
-  const springConfig = { damping: 28, stiffness: 90, mass: 1 };
+  const springConfig = { damping: 19, stiffness: 155, mass: 0.72 };
   const springX = useSpring(rawX, springConfig);
   const springY = useSpring(rawY, springConfig);
+  const canvasX = useTransform([springX, springY], (values: number[]) => {
+    const x = values[0] ?? 0;
+    const y = values[1] ?? 0;
+    const absX = Math.abs(x);
+    const absY = Math.abs(y);
+    const radial = Math.min(1, Math.hypot(absX, absY));
+
+    // Distance-triggered acceleration: modest near center, fast after small travel.
+    const responsiveX = Math.sign(x) * Math.pow(absX, 0.68);
+    const travelBoostX = Math.max(0, (absX - 0.16) / 0.84);
+    const accelerationX = Math.pow(travelBoostX, 1.6);
+
+    // Edge + corner amplification: strongest push near corners.
+    const edgeBoostX = Math.pow(absX, 1.2);
+    const cornerBoost = Math.max(0, (radial - 0.55) / 0.45);
+    const strength = 120 + accelerationX * 290 + edgeBoostX * 70 + cornerBoost * 140;
+
+    return responsiveX * strength;
+  });
+
+  const canvasY = useTransform([springX, springY], (values: number[]) => {
+    const x = values[0] ?? 0;
+    const y = values[1] ?? 0;
+    const absX = Math.abs(x);
+    const absY = Math.abs(y);
+    const radial = Math.min(1, Math.hypot(absX, absY));
+
+    const responsiveY = Math.sign(y) * Math.pow(absY, 0.68);
+    const travelBoostY = Math.max(0, (absY - 0.16) / 0.84);
+    const accelerationY = Math.pow(travelBoostY, 1.6);
+    const edgeBoostY = Math.pow(absY, 1.2);
+    const cornerBoost = Math.max(0, (radial - 0.55) / 0.45);
+    const strength = 95 + accelerationY * 240 + edgeBoostY * 60 + cornerBoost * 120;
+
+    return responsiveY * strength;
+  });
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -258,7 +365,6 @@ export default function HeroSection() {
 
   return (
     <section
-      ref={containerRef}
       className="relative w-full overflow-hidden flex items-center justify-center"
       style={{ height: "100svh", minHeight: 600, background: "#000" }}
     >
@@ -275,36 +381,29 @@ export default function HeroSection() {
         }}
       />
 
-      {/* ── Floating Images ── */}
-      {FLOATING_IMAGES.map((img) => (
-        <FloatingImage
-          key={img.id}
-          config={img}
-          springX={springX}
-          springY={springY}
-        />
-      ))}
+      {/* ── Infinite Canvas Layer ── */}
+      <m.div
+        style={{
+          position: "absolute",
+          left: `calc(50% - ${CANVAS_WIDTH / 2}px)`,
+          top: `calc(50% - ${CANVAS_HEIGHT / 2}px)`,
+          width: CANVAS_WIDTH,
+          height: CANVAS_HEIGHT,
+          x: canvasX,
+          y: canvasY,
+          zIndex: 0,
+        }}
+      >
+        {INFINITE_TILES.map((tile) => (
+          <FloatingImage key={tile.id} config={tile} />
+        ))}
+      </m.div>
 
       {/* ── Hero Text ── */}
       <div
         className="relative z-10 flex flex-col items-center text-center select-none"
         style={{ pointerEvents: "none" }}
       >
-        {/* Small eyebrow label */}
-        <m.div
-          initial={{ opacity: 0, letterSpacing: "0.2em" }}
-          animate={{ opacity: 1, letterSpacing: "0.35em" }}
-          transition={{ duration: 1.1, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-5 font-inter font-light"
-          style={{
-            fontSize: "11px",
-            color: "rgba(255,255,255,0.35)",
-            textTransform: "uppercase",
-          }}
-        >
-          Portfolio — 2025
-        </m.div>
-
         {/* ── MOHIT — letter-by-letter clip reveal ── */}
         <div
           className="flex items-center leading-none"
@@ -325,7 +424,7 @@ export default function HeroSection() {
                   display: "inline-block",
                   fontFamily: "var(--font-syne)",
                   fontWeight: 700,
-                  fontSize: "clamp(1.8rem, 3.2vw, 3.2rem)",
+                  fontSize: "clamp(2.8rem, 6vw, 6.2rem)",
                   lineHeight: 1,
                   color: "#ffffff",
                   letterSpacing: "0.18em",
@@ -336,107 +435,7 @@ export default function HeroSection() {
             </div>
           ))}
         </div>
-
-        {/* ── Subtitle ── */}
-        <m.div
-          variants={SUBTITLE_VARIANTS}
-          initial="hidden"
-          animate="visible"
-          className="mt-6 flex items-center gap-3"
-        >
-          {/* Left dash */}
-          <span
-            style={{
-              display: "block",
-              width: 32,
-              height: 1,
-              background: "rgba(255,255,255,0.25)",
-              flexShrink: 0,
-            }}
-          />
-
-          <p
-            className="font-inter font-light tracking-widest uppercase"
-            style={{
-              fontSize: "clamp(10px, 1.3vw, 14px)",
-              color: "rgba(255,255,255,0.45)",
-              letterSpacing: "0.3em",
-            }}
-          >
-            AI Fullstack Developer
-          </p>
-
-          {/* Right dash */}
-          <span
-            style={{
-              display: "block",
-              width: 32,
-              height: 1,
-              background: "rgba(255,255,255,0.25)",
-              flexShrink: 0,
-            }}
-          />
-        </m.div>
-
-        {/* ── CTA row ── */}
-        <m.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.05, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-10 flex items-center gap-4"
-          style={{ pointerEvents: "all" }}
-        >
-          <a
-            href="/projects"
-            className="btn-primary"
-            style={{ fontSize: 13, padding: "12px 26px" }}
-          >
-            View Work
-            <span aria-hidden="true">→</span>
-          </a>
-          <a
-            href="/about"
-            className="btn-outline"
-            style={{ fontSize: 13, padding: "11px 25px" }}
-          >
-            About Me
-          </a>
-        </m.div>
       </div>
-
-      {/* ── Scroll Indicator ── */}
-      <ScrollIndicator />
-
-      {/* ── Corner coordinates (decorative) ── */}
-      <m.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.6, duration: 0.8 }}
-        className="absolute bottom-8 right-8 font-inter"
-        style={{
-          fontSize: 10,
-          color: "rgba(255,255,255,0.15)",
-          letterSpacing: "0.1em",
-        }}
-        aria-hidden="true"
-      >
-        28.6139° N · 77.2090° E
-      </m.div>
-
-      <m.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.6, duration: 0.8 }}
-        className="absolute bottom-8 left-8 font-inter"
-        style={{
-          fontSize: 10,
-          color: "rgba(255,255,255,0.15)",
-          letterSpacing: "0.1em",
-        }}
-        aria-hidden="true"
-      >
-        © 2025
-      </m.div>
     </section>
   );
 }
