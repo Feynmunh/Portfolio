@@ -5,24 +5,13 @@ import { m, useInView } from "framer-motion";
 
 /* ── Skills data ── */
 const SKILLS = [
-  { label: "Next.js", category: "Frontend" },
-  { label: "React", category: "Frontend" },
-  { label: "TypeScript", category: "Frontend" },
-  { label: "Tailwind CSS", category: "Frontend" },
-  { label: "Framer Motion", category: "Frontend" },
-  { label: "OpenAI API", category: "AI" },
-  { label: "LangChain", category: "AI" },
-  { label: "Pinecone", category: "AI" },
-  { label: "Whisper", category: "AI" },
-  { label: "Hugging Face", category: "AI" },
   { label: "Python", category: "Backend" },
-  { label: "FastAPI", category: "Backend" },
-  { label: "Node.js", category: "Backend" },
-  { label: "PostgreSQL", category: "Backend" },
-  { label: "Redis", category: "Backend" },
-  { label: "Docker", category: "DevOps" },
-  { label: "Vercel", category: "DevOps" },
-  { label: "Git", category: "DevOps" },
+  { label: "Machine Learning", category: "AI" },
+  { label: "C++", category: "Backend" },
+  { label: "HTML", category: "Frontend" },
+  { label: "CSS", category: "Frontend" },
+  { label: "React", category: "Frontend" },
+  { label: "Express", category: "Backend" },
 ];
 
 
