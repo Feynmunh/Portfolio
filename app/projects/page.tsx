@@ -495,7 +495,7 @@ export default function ProjectsPage() {
 
           <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
             <a
-              href="mailto:mohit@example.com"
+              href="mailto:mohit.sharma80805@gmail.com"
               className="btn-primary whitespace-nowrap"
             >
               Get in touch →

@@ -224,7 +224,7 @@ export default function AboutSection() {
                     See My Work →
                   </a>
                   <a
-                    href="mailto:mohit@example.com"
+                    href="mailto:mohit.sharma80805@gmail.com"
                     className="font-inter text-sm text-white/40 hover:text-white/80 transition-colors duration-300 link-underline"
                   >
                     Say hello

@@ -420,7 +420,7 @@ export default function AboutPage() {
             <FadeUp delay={0.44}>
               <div className="flex items-center gap-4 pt-2">
                 <a
-                  href="mailto:mohit@example.com"
+                  href="mailto:mohit.sharma80805@gmail.com"
                   className="btn-primary"
                   style={{ fontSize: 13 }}
                 >
@@ -522,7 +522,7 @@ export default function AboutPage() {
           <FadeUp delay={0.38}>
             <div className="flex flex-wrap items-center justify-center gap-4">
               <a
-                href="mailto:mohit@example.com"
+                href="mailto:mohit.sharma80805@gmail.com"
                 className="btn-primary"
                 style={{ fontSize: 14, padding: "14px 30px" }}
               >

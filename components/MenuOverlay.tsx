@@ -283,10 +283,10 @@ export default function MenuOverlay({ onClose }: MenuOverlayProps) {
           {/* Contact */}
           <div className="flex flex-col gap-1">
             <a
-              href="mailto:mohit@example.com"
+              href="mailto:mohit.sharma80805@gmail.com"
               className="font-inter text-sm text-white/40 hover:text-white/80 transition-colors duration-300 link-underline"
             >
-              mohit@example.com
+              mohit.sharma80805@gmail.com
             </a>
             <span className="font-inter text-xs text-white/20 tracking-widest uppercase">
               Available for work

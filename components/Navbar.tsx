@@ -52,7 +52,7 @@ export default function Navbar() {
         aria-label="Main Navigation"
         className={`absolute top-6 left-1/2 z-50 flex items-center gap-4 md:gap-6 px-3 py-1.5 w-auto rounded-full transition-all duration-500 ${
           scrolled && !menuOpen
-            ? "bg-[#FDFBF7]/70 backdrop-blur-3xl border border-white/50 shadow-[0_8px_30px_rgba(0,0,0,0.08)]"
+            ? "bg-[#0a0a0a] border border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.8)]"
             : "bg-transparent border border-transparent shadow-none"
         }`}
       >
