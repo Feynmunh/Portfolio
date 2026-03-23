@@ -16,27 +16,28 @@ export interface Project {
 export const projects: Project[] = [
   {
     id: 1,
-    title: 'NeuralChat',
-    description: 'Real-time AI conversation platform with context memory and streaming responses.',
+    title: 'trackmebaby',
+    description: 'A background desktop app that watches your projects folder and keeps track of what you are working on. Ask AI questions about your work history',
     longDescription:
-      'A full-stack conversational AI platform built with Next.js and OpenAI GPT-4. Features include multi-turn context memory, streaming token output, conversation history, user authentication, and a clean minimal UI. Handles thousands of concurrent sessions with edge-deployed serverless functions.',
-    tech: ['Next.js', 'OpenAI', 'TypeScript', 'PostgreSQL', 'Tailwind', 'Vercel AI SDK'],
+      'trackmebaby is a lightweight desktop app that quietly watches your projects folder to build a rich history of your work. Say goodbye 👋 to manually opening and closing todos, forgetting where you left off, and maintaining a separate Notion page just to jot things down related to your project.',
+
+    tech: ['elcrobun.js', 'Gemini', 'TypeScript', 'SQLite', 'TailwindCss', 'ReactJS'],
     category: ['AI', 'Fullstack'],
     year: 2024,
     color: '#6366f1',
     accentColor: '#818cf8',
-    link: '#',
+    link: 'https://github.com/Feynmunh/trackmebaby',
     github: '#',
     featured: true,
   },
   {
     id: 2,
-    title: 'CodeMind',
-    description: 'AI-powered code review tool that catches bugs, suggests refactors, and explains complexity.',
+    title: 'Kropify',
+    description: 'AI-powered Crop Yield Prediction and Recommendation System',
     longDescription:
-      'An intelligent code review assistant integrated with GitHub. Uses GPT-4 to analyze pull requests, identify potential bugs, suggest performance improvements, and explain complex logic in plain English. Features a VS Code extension, CLI tool, and web dashboard with analytics.',
-    tech: ['Node.js', 'GPT-4', 'GitHub API', 'React', 'Python', 'FastAPI'],
-    category: ['AI', 'Developer Tools'],
+      'Kropify is an intelligent crop yield prediction and recommendation system that helps farmers make informed decisions about their crops. It uses machine learning models to predict crop yields based on historical data, weather conditions, and soil properties. It also provides recommendations to farmers on how to improve their crop yields.',
+    tech: ['Node.js', 'React', 'Next.js', 'Machine Learning', 'FastAPI,'],
+    category: ['AI', 'Machine Learning'],
     year: 2024,
     color: '#10b981',
     accentColor: '#34d399',
@@ -46,12 +47,12 @@ export const projects: Project[] = [
   },
   {
     id: 3,
-    title: 'DataSense',
-    description: 'Natural language analytics dashboard — ask questions about your data in plain English.',
+    title: 'Alertship',
+    description: 'A web app for people to get notified about upcoming water and electricity outages on crowdsourced data',
     longDescription:
       'A data analytics platform that lets non-technical users query complex datasets using natural language. Translates questions into SQL, executes them, and renders results as beautiful interactive charts. Built with a Python/FastAPI backend, React frontend, and LangChain for query orchestration.',
-    tech: ['React', 'Python', 'FastAPI', 'LangChain', 'PostgreSQL', 'D3.js'],
-    category: ['AI', 'Data', 'Fullstack'],
+    tech: ['React', 'Python', 'firestoredb', 'Google Maps API'],
+    category: ['Data', 'Fullstack'],
     year: 2024,
     color: '#f59e0b',
     accentColor: '#fbbf24',
@@ -88,22 +89,7 @@ export const projects: Project[] = [
     link: '#',
     github: '#',
     featured: false,
-  },
-  {
-    id: 6,
-    title: 'ShipFast AI',
-    description: 'Boilerplate SaaS starter with AI features pre-wired — auth, billing, and LLM integrations.',
-    longDescription:
-      'A production-ready Next.js SaaS boilerplate with AI capabilities baked in from day one. Includes Stripe billing, NextAuth, OpenAI chat, image generation, document Q&A, rate limiting, usage tracking, and a beautiful UI component library. Helps developers ship AI products in days.',
-    tech: ['Next.js', 'Stripe', 'Prisma', 'OpenAI', 'NextAuth', 'TypeScript'],
-    category: ['Fullstack', 'SaaS', 'AI'],
-    year: 2023,
-    color: '#06b6d4',
-    accentColor: '#22d3ee',
-    link: '#',
-    github: '#',
-    featured: false,
-  },
+  }
 ]
 
 export const categories = ['All', 'AI', 'Fullstack', 'Developer Tools', 'Data', 'Realtime', 'SaaS', 'Voice']

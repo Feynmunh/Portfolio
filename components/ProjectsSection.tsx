@@ -63,7 +63,7 @@ const lineVariants = {
 };
 
 /* ── Featured projects only ── */
-const featured = projects.filter((p) => p.featured);
+const bentoProjects = projects.slice(0, 6);
 
 /* ── Project Card ── */
 function ProjectCard({
@@ -75,17 +75,33 @@ function ProjectCard({
   index: number;
   inView: boolean;
 }) {
+  // Bento grid spans for 6 items in a 4-col grid based on reference image
+  const bentoClass =
+    index === 0
+      ? "md:col-span-1 lg:col-span-1"
+      : index === 1
+      ? "md:col-span-1 lg:col-span-1"
+      : index === 2
+      ? "md:col-span-2 lg:col-span-2"
+      : index === 3
+      ? "md:col-span-2 lg:col-span-2"
+      : index === 4
+      ? "md:col-span-1 lg:col-span-1"
+      : index === 5
+      ? "md:col-span-1 lg:col-span-1"
+      : "md:col-span-1 lg:col-span-1";
+
   return (
     <m.article
       custom={index}
       variants={cardVariants}
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
-      className="group relative flex flex-col overflow-hidden rounded-none border border-white/[0.08] bg-[#000000] hover:border-[#B47CFF]/50 transition-all duration-500"
+      className={`group relative flex flex-col overflow-hidden rounded-none border border-white/[0.08] bg-[#000000] hover:border-[#B47CFF]/50 transition-all duration-500 ${bentoClass}`}
     >
       {/* ── Visual Frame ── */}
       <div
-        className="relative overflow-hidden border-b border-white/[0.08]"
+        className="relative overflow-hidden border-b border-white/[0.08] flex-shrink-0"
         style={{ aspectRatio: "16 / 9" }}
       >
         {/* Strict pixel grid pattern instead of faint gradients */}
@@ -135,38 +151,40 @@ function ProjectCard({
       </div>
 
       {/* ── Card body ── */}
-      <div className="flex flex-col flex-1 p-6 gap-5 bg-[#050505]">
-        {/* Title row */}
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="font-syne font-bold text-white text-xl leading-tight group-hover:text-[#B47CFF] transition-colors duration-300">
-            {project.title}
-          </h3>
+      <div className="flex flex-col flex-1 p-6 gap-5 bg-[#050505] justify-between">
+        <div className="flex flex-col gap-5">
+          {/* Title row */}
+          <div className="flex items-start justify-between gap-3">
+            <h3 className="font-syne font-bold text-white text-xl leading-tight group-hover:text-[#B47CFF] transition-colors duration-300">
+              {project.title}
+            </h3>
 
-          {/* Arrow link */}
-          <a
-            href={project.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`Visit ${project.title}`}
-            className="flex-shrink-0 w-8 h-8 flex items-center justify-center text-white/50 hover:text-[#000000] hover:bg-[#FFEA00] transition-all duration-300 mt-0.5"
-            style={{ fontSize: 16 }}
-          >
-            ↗
-          </a>
-        </div>
+            {/* Arrow link */}
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Visit ${project.title}`}
+              className="flex-shrink-0 w-8 h-8 flex items-center justify-center text-white/50 hover:text-[#000000] hover:bg-[#FFEA00] transition-all duration-300 mt-0.5"
+              style={{ fontSize: 16 }}
+            >
+              ↗
+            </a>
+          </div>
 
-        {/* Description */}
-        <p className="font-mono text-[12px] leading-relaxed flex-1 text-white/50">
-          {project.description}
-        </p>
+          {/* Description */}
+          <p className="font-mono text-[12px] leading-relaxed text-white/50">
+            {project.description}
+          </p>
 
-        {/* Category tags */}
-        <div className="flex flex-wrap gap-2">
-          {project.category.map((cat) => (
-            <span key={cat} className="font-mono text-[10px] text-[#000000] bg-[#FFEA00] px-2 py-0.5 font-bold uppercase tracking-wider">
-              {cat}
-            </span>
-          ))}
+          {/* Category tags */}
+          <div className="flex flex-wrap gap-2">
+            {project.category.map((cat) => (
+              <span key={cat} className="font-mono text-[10px] text-[#000000] bg-[#FFEA00] px-2 py-0.5 font-bold uppercase tracking-wider">
+                {cat}
+              </span>
+            ))}
+          </div>
         </div>
 
         {/* Tech stack */}
@@ -293,9 +311,9 @@ export default function ProjectsSection() {
         {/* ── Project Grid ── */}
         <div
           ref={gridRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
         >
-          {featured.map((project, i) => (
+          {bentoProjects.map((project, i) => (
             <ProjectCard
               key={project.id}
               project={project}

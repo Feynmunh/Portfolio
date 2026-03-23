@@ -4,45 +4,6 @@ import { useRef } from "react";
 import { m, useInView } from "framer-motion";
 import Link from "next/link";
 
-/* ── Timeline data ── */
-const TIMELINE = [
-  {
-    year: "2024",
-    role: "AI Fullstack Developer",
-    company: "Freelance & Open Source",
-    description:
-      "Building production AI applications — LLM-powered SaaS products, RAG pipelines, real-time streaming interfaces, and developer tools. Shipped 8+ projects used by thousands of users.",
-    tags: ["Next.js", "OpenAI", "LangChain", "FastAPI"],
-    current: true,
-  },
-  {
-    year: "2023",
-    role: "Fullstack Developer",
-    company: "Tech Startup",
-    description:
-      "Led frontend architecture for a B2B SaaS platform. Introduced AI-powered features including smart search, automated report generation, and an in-app assistant. Reduced user onboarding time by 40%.",
-    tags: ["React", "Node.js", "PostgreSQL", "GPT-4"],
-    current: false,
-  },
-  {
-    year: "2022",
-    role: "Frontend Developer",
-    company: "Digital Agency",
-    description:
-      "Crafted high-performance web experiences for clients across e-commerce, fintech, and media. Specialised in animation-rich interfaces and Core Web Vitals optimisation.",
-    tags: ["React", "TypeScript", "Tailwind", "GSAP"],
-    current: false,
-  },
-  {
-    year: "2021",
-    role: "Junior Web Developer",
-    company: "First Role",
-    description:
-      "Started professional journey building React applications, RESTful APIs, and learning the fundamentals of scalable software architecture. Fell in love with clean code and great UX.",
-    tags: ["React", "Node.js", "MongoDB", "CSS"],
-    current: false,
-  },
-];
 
 /* ── Skill categories ── */
 const SKILL_GROUPS = [
@@ -92,29 +53,6 @@ const SKILL_GROUPS = [
   },
 ];
 
-/* ── Values ── */
-const VALUES = [
-  {
-    icon: "⚡",
-    title: "Ship Fast, Iterate Faster",
-    body: "The best product is the one users can give feedback on. I prioritise getting real software in front of real people quickly, then refining relentlessly.",
-  },
-  {
-    icon: "🧠",
-    title: "AI as Infrastructure",
-    body: "I don't bolt AI onto existing apps. I design systems where intelligence is foundational — from the data model to the API surface to the user experience.",
-  },
-  {
-    icon: "✦",
-    title: "Craft Matters",
-    body: "Every interaction, every animation, every error message is an opportunity. I care about the 1% that most developers skip, because users feel it even when they can't name it.",
-  },
-  {
-    icon: "🔍",
-    title: "Understand the Problem First",
-    body: "The worst code is code that solves the wrong problem perfectly. I invest time understanding the why before touching a keyboard.",
-  },
-];
 
 /* ── Animation helpers ── */
 function FadeUp({
@@ -222,153 +160,6 @@ function SkillBar({
   );
 }
 
-/* ── Timeline item ── */
-function TimelineItem({
-  item,
-  index,
-  inView,
-}: {
-  item: (typeof TIMELINE)[0];
-  index: number;
-  inView: boolean;
-}) {
-  return (
-    <m.div
-      initial={{ opacity: 0, x: -32 }}
-      animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{
-        duration: 0.85,
-        delay: index * 0.14,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      className="relative pl-10 pb-12 last:pb-0"
-    >
-      {/* Vertical line */}
-      {index < TIMELINE.length - 1 && (
-        <div
-          className="absolute left-[11px] top-5 bottom-0 w-px"
-          style={{ background: "rgba(255,255,255,0.07)" }}
-        />
-      )}
-
-      {/* Dot */}
-      <div
-        className="absolute left-0 top-1 w-[22px] h-[22px] rounded-full border flex items-center justify-center"
-        style={{
-          borderColor: item.current
-            ? "rgba(255,255,255,0.5)"
-            : "rgba(255,255,255,0.12)",
-          background: item.current ? "rgba(255,255,255,0.08)" : "transparent",
-        }}
-      >
-        {item.current && (
-          <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-        )}
-      </div>
-
-      {/* Content */}
-      <div className="flex flex-col gap-2">
-        {/* Year + current badge */}
-        <div className="flex items-center gap-3">
-          <span
-            className="font-inter text-xs tracking-widest uppercase"
-            style={{ color: "rgba(255,255,255,0.25)" }}
-          >
-            {item.year}
-          </span>
-          {item.current && (
-            <span
-              className="font-inter text-[10px] tracking-wider uppercase px-2 py-0.5 rounded-full border"
-              style={{
-                color: "rgba(255,255,255,0.55)",
-                borderColor: "rgba(255,255,255,0.12)",
-                background: "rgba(255,255,255,0.04)",
-              }}
-            >
-              Now
-            </span>
-          )}
-        </div>
-
-        {/* Role */}
-        <h4
-          className="font-syne font-bold leading-tight"
-          style={{
-            fontSize: "clamp(1.1rem, 2vw, 1.35rem)",
-            color: "#ffffff",
-          }}
-        >
-          {item.role}
-        </h4>
-
-        <span
-          className="font-inter text-sm"
-          style={{ color: "rgba(255,255,255,0.35)" }}
-        >
-          {item.company}
-        </span>
-
-        {/* Description */}
-        <p
-          className="font-inter text-sm leading-relaxed mt-1 max-w-lg"
-          style={{ color: "rgba(255,255,255,0.45)" }}
-        >
-          {item.description}
-        </p>
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2 mt-2">
-          {item.tags.map((tag) => (
-            <span key={tag} className="tag" style={{ fontSize: 10 }}>
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
-    </m.div>
-  );
-}
-
-/* ── Value card ── */
-function ValueCard({
-  item,
-  index,
-  inView,
-}: {
-  item: (typeof VALUES)[0];
-  index: number;
-  inView: boolean;
-}) {
-  return (
-    <m.div
-      initial={{ opacity: 0, y: 32 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.8,
-        delay: index * 0.11,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      className="group p-7 rounded-xl border border-white/[0.07] hover:border-white/20 transition-colors duration-500 flex flex-col gap-4"
-      style={{ background: "rgba(255,255,255,0.025)" }}
-    >
-      <span style={{ fontSize: 28 }} aria-hidden="true">
-        {item.icon}
-      </span>
-      <h4
-        className="font-syne font-bold text-white"
-        style={{ fontSize: "1.05rem", letterSpacing: "-0.01em" }}
-      >
-        {item.title}
-      </h4>
-      <p
-        className="font-inter text-sm leading-relaxed"
-        style={{ color: "rgba(255,255,255,0.4)" }}
-      >
-        {item.body}
-      </p>
-    </m.div>
-  );
-}
 
 /* ── Skill group (extracted to satisfy Rules of Hooks) ── */
 function SkillGroup({
@@ -427,17 +218,6 @@ function SkillGroup({
    PAGE COMPONENT
 ══════════════════════════════════════════════ */
 export default function AboutPage() {
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const timelineInView = useInView(timelineRef, {
-    once: true,
-    margin: "-60px 0px",
-  });
-
-  const valuesRef = useRef<HTMLDivElement>(null);
-  const valuesInView = useInView(valuesRef, {
-    once: true,
-    margin: "-60px 0px",
-  });
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -700,83 +480,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ══ TIMELINE ══ */}
-
-      <section className="py-24 md:py-32 px-6 md:px-10 border-t border-white/[0.06]">
-        <div className="max-w-6xl mx-auto">
-          {/* Heading */}
-          <div className="mb-16 md:mb-20">
-            <FadeUp delay={0.05}>
-              <span
-                className="font-inter text-[10px] tracking-[0.3em] uppercase block mb-5"
-                style={{ color: "rgba(255,255,255,0.25)" }}
-              >
-                03 / Experience
-              </span>
-            </FadeUp>
-            <RevealText delay={0.1}>
-              <h2
-                className="font-syne font-extrabold leading-none tracking-tight text-white"
-                style={{ fontSize: "clamp(2.4rem, 6vw, 6rem)" }}
-              >
-                Timeline
-              </h2>
-            </RevealText>
-          </div>
-
-          {/* Timeline */}
-          <div ref={timelineRef} className="max-w-2xl">
-            {TIMELINE.map((item, i) => (
-              <TimelineItem
-                key={item.year + item.role}
-                item={item}
-                index={i}
-                inView={timelineInView}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══ VALUES ══ */}
-      <section className="py-24 md:py-32 px-6 md:px-10 border-t border-white/[0.06]">
-        <div className="max-w-6xl mx-auto">
-          {/* Heading */}
-          <div className="mb-16 md:mb-20">
-            <FadeUp delay={0.05}>
-              <span
-                className="font-inter text-[10px] tracking-[0.3em] uppercase block mb-5"
-                style={{ color: "rgba(255,255,255,0.25)" }}
-              >
-                04 / Philosophy
-              </span>
-            </FadeUp>
-            <RevealText delay={0.1}>
-              <h2
-                className="font-syne font-extrabold leading-none tracking-tight text-white"
-                style={{ fontSize: "clamp(2.4rem, 6vw, 6rem)" }}
-              >
-                How I Work
-              </h2>
-            </RevealText>
-          </div>
-
-          {/* Cards grid */}
-          <div
-            ref={valuesRef}
-            className="grid grid-cols-1 md:grid-cols-2 gap-4"
-          >
-            {VALUES.map((val, i) => (
-              <ValueCard
-                key={val.title}
-                item={val}
-                index={i}
-                inView={valuesInView}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ══ CTA FOOTER BAND ══ */}
       <section className="py-24 md:py-36 px-6 md:px-10 border-t border-white/[0.06] text-center">
