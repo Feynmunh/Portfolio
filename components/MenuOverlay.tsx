@@ -1,36 +1,36 @@
-'use client'
+"use client";
 
-import { useEffect, useRef } from 'react'
-import Link from 'next/link'
-import { m } from 'framer-motion'
+import { useEffect, useRef } from "react";
+import Link from "next/link";
+import { m } from "framer-motion";
 
 interface MenuOverlayProps {
-  onClose: () => void
+  onClose: () => void;
 }
 
 const menuItems = [
   {
-    label: 'About',
-    href: '/about',
-    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    description: 'Who I am',
-    imageAlign: 'right' as const,
+    label: "About",
+    href: "/about",
+    gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    description: "Who I am",
+    imageAlign: "right" as const,
   },
   {
-    label: 'Projects',
-    href: '/projects',
-    gradient: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
-    description: 'What I build',
-    imageAlign: 'left' as const,
+    label: "Projects",
+    href: "/projects",
+    gradient: "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)",
+    description: "What I build",
+    imageAlign: "left" as const,
   },
   {
-    label: 'Feed',
-    href: '/feed',
-    gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-    description: 'What I think',
-    imageAlign: 'right' as const,
+    label: "Feed",
+    href: "/feed",
+    gradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+    description: "What I think",
+    imageAlign: "right" as const,
   },
-]
+];
 
 /* ── Animation Variants ── */
 const overlayVariants = {
@@ -43,7 +43,7 @@ const overlayVariants = {
     opacity: 0,
     transition: { duration: 0.35, ease: [0.7, 0, 0.84, 0] },
   },
-}
+};
 
 const bgPanelVariants = {
   hidden: { scaleY: 0, originY: 0 },
@@ -56,7 +56,7 @@ const bgPanelVariants = {
     originY: 1,
     transition: { duration: 0.5, ease: [0.7, 0, 0.84, 0] },
   },
-}
+};
 
 const headerVariants = {
   hidden: { opacity: 0, y: -20 },
@@ -70,7 +70,7 @@ const headerVariants = {
     y: -10,
     transition: { duration: 0.2 },
   },
-}
+};
 
 const itemVariants = {
   hidden: { opacity: 0, y: 48 },
@@ -92,7 +92,7 @@ const itemVariants = {
       ease: [0.7, 0, 0.84, 0],
     },
   }),
-}
+};
 
 const footerVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -102,7 +102,7 @@ const footerVariants = {
     transition: { duration: 0.6, delay: 0.65, ease: [0.16, 1, 0.3, 1] },
   },
   exit: { opacity: 0, transition: { duration: 0.2 } },
-}
+};
 
 const dividerVariants = {
   hidden: { scaleX: 0, originX: 0 },
@@ -115,19 +115,19 @@ const dividerVariants = {
     },
   }),
   exit: { scaleX: 0, originX: 1, transition: { duration: 0.25 } },
-}
+};
 
 export default function MenuOverlay({ onClose }: MenuOverlayProps) {
-  const overlayRef = useRef<HTMLDivElement>(null)
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   /* ── Close on Escape ── */
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
 
   return (
     <m.div
@@ -148,7 +148,7 @@ export default function MenuOverlay({ onClose }: MenuOverlayProps) {
         animate="visible"
         exit="exit"
         className="absolute inset-0 bg-black"
-        style={{ transformOrigin: 'top' }}
+        style={{ transformOrigin: "top" }}
       />
 
       {/* ── Subtle noise texture overlay ── */}
@@ -207,7 +207,10 @@ export default function MenuOverlay({ onClose }: MenuOverlayProps) {
         />
 
         {/* ── Nav Items ── */}
-        <nav className="flex-1 flex flex-col justify-center px-6 md:px-10 py-4" aria-label="Main navigation">
+        <nav
+          className="flex-1 flex flex-col justify-center px-6 md:px-10 py-4"
+          aria-label="Main navigation"
+        >
           {menuItems.map((item, i) => (
             <div key={item.href}>
               <m.div
@@ -223,15 +226,17 @@ export default function MenuOverlay({ onClose }: MenuOverlayProps) {
                   className="group flex items-center justify-between py-6 md:py-8 overflow-hidden"
                 >
                   {/* Left side: image (when imageAlign is left) + label */}
-                  <div className={`flex items-center gap-6 ${item.imageAlign === 'right' ? 'flex-1' : ''}`}>
-                    {item.imageAlign === 'left' && (
+                  <div
+                    className={`flex items-center gap-6 ${item.imageAlign === "right" ? "flex-1" : ""}`}
+                  >
+                    {item.imageAlign === "left" && (
                       <CircleImage gradient={item.gradient} />
                     )}
 
                     {/* Nav label */}
                     <span
                       className="font-syne font-bold leading-none tracking-tight text-white/70 group-hover:text-white transition-colors duration-400"
-                      style={{ fontSize: 'clamp(3rem, 9vw, 8rem)' }}
+                      style={{ fontSize: "clamp(3rem, 9vw, 8rem)" }}
                     >
                       {item.label}
                     </span>
@@ -244,7 +249,7 @@ export default function MenuOverlay({ onClose }: MenuOverlayProps) {
                       {item.description}
                     </span>
 
-                    {item.imageAlign === 'right' && (
+                    {item.imageAlign === "right" && (
                       <CircleImage gradient={item.gradient} />
                     )}
 
@@ -317,18 +322,18 @@ export default function MenuOverlay({ onClose }: MenuOverlayProps) {
               LinkedIn
             </a>
             <a
-              href="https://twitter.com"
+              href="https://x.com"
               target="_blank"
               rel="noopener noreferrer"
               className="font-inter text-sm text-white/40 hover:text-white/80 transition-colors duration-300 link-underline"
             >
-              Twitter
+              X
             </a>
           </div>
         </m.div>
       </div>
     </m.div>
-  )
+  );
 }
 
 /* ── Circle Image Component ── */
@@ -336,11 +341,11 @@ function CircleImage({ gradient }: { gradient: string }) {
   return (
     <div
       className="relative flex-shrink-0 w-14 h-14 md:w-[72px] md:h-[72px] rounded-full overflow-hidden group-hover:scale-110 transition-transform duration-500"
-      style={{ background: gradient, boxShadow: '0 8px 32px rgba(0,0,0,0.4)' }}
+      style={{ background: gradient, boxShadow: "0 8px 32px rgba(0,0,0,0.4)" }}
       aria-hidden="true"
     >
       {/* Inner shine */}
       <div className="absolute inset-0 rounded-full bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
     </div>
-  )
+  );
 }
