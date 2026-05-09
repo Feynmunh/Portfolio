@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { m, useInView } from "framer-motion";
 
 /* ── Skills data ── */
@@ -13,6 +13,209 @@ const SKILLS = [
   { label: "React", category: "Frontend" },
   { label: "Express", category: "Backend" },
 ];
+
+const HERO_ROBOTS = [
+  [
+    [
+      "                    ",
+      "                    ",
+      "    ##        ##    ",
+      "   ####      ####   ",
+      "    ##        ##    ",
+      "      ########      ",
+      "      #++++++#      ",
+      "      #++++++#      ",
+      "      ########      ",
+      "      #      #      ",
+      "     ##########     ",
+      "     # ########     ",
+      "     ##########     ",
+      "                    ",
+    ],
+    [
+      "                    ",
+      "                    ",
+      "    ##        ##    ",
+      "   ## ##    ## ##   ",
+      "    ##        ##    ",
+      "      ########      ",
+      "      #      #      ",
+      "      #      #      ",
+      "      ########      ",
+      "      #      #      ",
+      "     ##########     ",
+      "     ######## #     ",
+      "     ##########     ",
+      "                    ",
+    ],
+  ],
+  [
+    [
+      "                    ",
+      "                    ",
+      "      ########      ",
+      "     ##########     ",
+      "    ###+####+###    ",
+      "    ############    ",
+      "    ##        ##    ",
+      "   ###        ###   ",
+      "   ### ###### ###   ",
+      "   ### #++++# ###   ",
+      "   ### ###### ###   ",
+      "       #    #       ",
+      "       ##  ##       ",
+      "                    ",
+    ],
+    [
+      "                    ",
+      "                    ",
+      "      ########      ",
+      "     ##########     ",
+      "    ## #### ####    ",
+      "    ############    ",
+      "    ##        ##    ",
+      "   ###        ###   ",
+      "   ### ###### ###   ",
+      "   ### #    # ###   ",
+      "   ### ###### ###   ",
+      "       #    #       ",
+      "       ##  ##       ",
+      "                    ",
+    ],
+  ],
+  [
+    [
+      "                    ",
+      "         ##         ",
+      "         ##         ",
+      "       ######       ",
+      "      ########      ",
+      "      ##+##+##      ",
+      "      ########      ",
+      "       ######       ",
+      "         ##         ",
+      "      ########      ",
+      "      #  ##  #      ",
+      "         ##         ",
+      "        ####        ",
+      "                    ",
+    ],
+    [
+      "                    ",
+      "         ++         ",
+      "         ##         ",
+      "       ######       ",
+      "      ########      ",
+      "      ## ## ##      ",
+      "      ########      ",
+      "  #    ######    #  ",
+      "  ##     ##     ##  ",
+      "   ##########   #   ",
+      "      #  ##  #      ",
+      "         ##         ",
+      "        ####        ",
+      "                    ",
+    ],
+  ],
+  [
+    [
+      "                    ",
+      "      ##    ##      ",
+      "       ##  ##       ",
+      "    ############    ",
+      "   ##############   ",
+      "   ##++######++##   ",
+      "   ##############   ",
+      "     ##########     ",
+      "   ####      ####   ",
+      "  ####  ####  ####  ",
+      "   ##   ####   ##   ",
+      "        #  #        ",
+      "       ##  ##       ",
+      "                    ",
+    ],
+    [
+      "                    ",
+      "      ++    ++      ",
+      "       ##  ##       ",
+      "    ############    ",
+      "   ##############   ",
+      "   ##  ######  ##   ",
+      "   ##############   ",
+      "     ##########     ",
+      "  ####        ####  ",
+      "   ###  ####  ###   ",
+      "    ##  ####  ##    ",
+      "        #  #        ",
+      "       ##  ##       ",
+      "                    ",
+    ],
+  ],
+];
+
+const ROBOT_EMPTY = 0;
+const ROBOT_PURPLE = 1;
+const ROBOT_YELLOW = 2;
+
+function HeroRobot({ frames, className = "" }: { frames: string[][]; className?: string }) {
+  const cols = frames[0]?.[0]?.length ?? 0;
+  const rows = frames[0]?.length ?? 0;
+  const [grid, setGrid] = useState<number[]>([]);
+
+  useEffect(() => {
+    let tickCount = 0;
+
+    const intervalId = setInterval(() => {
+      tickCount++;
+      const frame = frames[Math.floor(tickCount / 4) % frames.length];
+      const next = Array(rows * cols).fill(ROBOT_EMPTY);
+
+      for (let index = 0; index < next.length; index++) {
+        if (Math.random() < 0.08) {
+          next[index] = Math.random() < 0.88 ? ROBOT_PURPLE : ROBOT_YELLOW;
+        }
+      }
+
+      for (let y = 0; y < rows; y++) {
+        for (let x = 0; x < cols; x++) {
+          const char = frame[y]?.[x];
+          const index = y * cols + x;
+
+          if (char === "#") {
+            next[index] = ROBOT_PURPLE;
+          } else if (char === "+" || char === "=") {
+            next[index] = ROBOT_YELLOW;
+          }
+        }
+      }
+
+      setGrid(next);
+    }, 240);
+
+    return () => clearInterval(intervalId);
+  }, [cols, frames, rows]);
+
+  return (
+    <div
+      className={`hero-robot hero-robot-grid ${className}`}
+      style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
+      aria-hidden="true"
+    >
+      {grid.map((value, index) => (
+        <span
+          key={index}
+          className={
+            value === ROBOT_PURPLE
+              ? "hero-robot-dot hero-robot-dot-purple"
+              : value === ROBOT_YELLOW
+                ? "hero-robot-dot hero-robot-dot-yellow"
+                : "hero-robot-dot"
+          }
+        />
+      ))}
+    </div>
+  );
+}
 
 
 
@@ -112,58 +315,54 @@ export default function AboutSection() {
   return (
     <section
       id="about"
-      className="relative w-full bg-black py-32 md:py-44 overflow-hidden"
+      className="relative w-full min-h-screen bg-black pt-36 pb-28 md:pt-44 md:pb-36 overflow-hidden"
     >
-      {/* ── Subtle top border ── */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-white/[0.06]" />
+      {/* ── Pure black hero background ── */}
+      <div className="pointer-events-none absolute left-6 right-6 top-24 h-px bg-white/[0.08] md:left-10 md:right-10" />
+      <div className="pointer-events-none absolute right-8 top-32 hidden h-[520px] w-[360px] lg:block" aria-hidden="true">
+        <HeroRobot frames={HERO_ROBOTS[0]} className="hero-robot-one" />
+        <HeroRobot frames={HERO_ROBOTS[1]} className="hero-robot-two" />
+        <HeroRobot frames={HERO_ROBOTS[2]} className="hero-robot-three" />
+        <HeroRobot frames={HERO_ROBOTS[3]} className="hero-robot-four" />
+      </div>
 
-      <div className="max-w-7xl mx-auto px-6 md:px-10">
-        {/* ── Section label ── */}
-
-        <FadeUp delay={0}>
-          <span className="font-inter text-[10px] tracking-[0.3em] uppercase text-white/25 block mb-12">
-            01 / About
-          </span>
-        </FadeUp>
-
-        {/* ── Bio section ── */}
-        <div className="flex flex-col gap-16 mb-24 lg:mb-32">
+      <div className="relative max-w-7xl mx-auto px-6 md:px-10">
+        {/* ── Hero bio section ── */}
+        <div className="mb-20 lg:mb-28">
           {/* ── Heading + Bio ── */}
           <div>
             {/* Large heading */}
-            <div className="mb-10">
+            <div className="mb-10 md:mb-12">
               <RevealHeading delay={0.1}>
                 <h2
-                  className="font-syne font-bold leading-[0.92] tracking-tight"
+                  className="matrix-text font-syne font-bold leading-[0.86] tracking-[-0.07em]"
                   style={{
-                    fontSize: "clamp(2.6rem, 7vw, 7.5rem)",
-                    color: "#ffffff",
+                    fontSize: "clamp(2.8rem, 8.4vw, 8.75rem)",
                   }}
                 >
-                  Building at the
+                  Mohit
                 </h2>
               </RevealHeading>
               <RevealHeading delay={0.18}>
                 <h2
-                  className="font-syne font-bold leading-[0.92] tracking-tight"
+                  className="matrix-text font-syne font-bold leading-[0.86] tracking-[-0.07em]"
                   style={{
-                    fontSize: "clamp(2.6rem, 7vw, 7.5rem)",
-                    color: "rgba(255,255,255,0.25)",
+                    fontSize: "clamp(2.8rem, 8.4vw, 8.75rem)",
                   }}
                 >
-                  edge of AI.
+                  Sharma
                 </h2>
               </RevealHeading>
             </div>
 
             {/* Bio paragraphs */}
-            <div className="space-y-5 max-w-xl">
+            <div className="space-y-5 max-w-2xl">
               <FadeUp delay={0.28}>
                 <p
                   className="font-inter leading-relaxed"
                   style={{
-                    fontSize: "clamp(15px, 1.6vw, 18px)",
-                    color: "rgba(255,255,255,0.6)",
+                    fontSize: "clamp(16px, 1.8vw, 21px)",
+                    color: "rgba(255,255,255,0.72)",
                   }}
                 >
                   I'm <span className="text-white font-medium">Mohit</span> — an
@@ -178,8 +377,8 @@ export default function AboutSection() {
                 <p
                   className="font-inter leading-relaxed"
                   style={{
-                    fontSize: "clamp(15px, 1.6vw, 18px)",
-                    color: "rgba(255,255,255,0.45)",
+                    fontSize: "clamp(15px, 1.45vw, 18px)",
+                    color: "rgba(255,255,255,0.48)",
                   }}
                 >
                   From real-time LLM streaming interfaces to RAG pipelines,
@@ -204,7 +403,7 @@ export default function AboutSection() {
 
               {/* CTA */}
               <FadeUp delay={0.5}>
-                <div className="flex items-center gap-4 pt-4">
+                <div className="flex flex-wrap items-center gap-4 pt-5">
                   <a
                     href="/projects"
                     className="btn-primary"
@@ -222,8 +421,6 @@ export default function AboutSection() {
               </FadeUp>
             </div>
           </div>
-
-
         </div>
 
         {/* ── Divider ── */}
