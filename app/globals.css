@@ -228,6 +228,75 @@ body {
     background: transparent;
 }
 
+.hero-matrix-glitch {
+    position: absolute;
+    top: 12px;
+    right: 0;
+    display: grid;
+    gap: 10px;
+    width: 430px;
+    padding: 28px;
+    opacity: 0.95;
+    background: transparent;
+    overflow: hidden;
+}
+
+.hero-matrix-dot {
+    width: 14px;
+    height: 14px;
+    background: transparent;
+    transform-origin: center;
+    transition: background 80ms linear, transform 80ms linear;
+}
+
+.hero-matrix-dot-dim {
+    background: #B47CFF;
+    animation: matrix-block-pop 360ms steps(2, end) both;
+}
+
+.hero-matrix-dot-bright {
+    background: #B47CFF;
+    animation: matrix-block-snap 360ms steps(2, end) both;
+}
+
+.hero-matrix-dot-hot {
+    background: #FFEA00;
+    animation: matrix-block-glitch 360ms steps(3, end) both;
+}
+
+@keyframes matrix-block-pop {
+    0% {
+        transform: scale(0.72);
+    }
+    45%, 100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes matrix-block-snap {
+    0% {
+        transform: translate3d(0, -6px, 0) scale(0.7);
+    }
+    45% {
+        transform: translate3d(0, 0, 0) scale(1.18);
+    }
+    100% {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
+@keyframes matrix-block-glitch {
+    0% {
+        transform: translate3d(-4px, 0, 0) scale(1);
+    }
+    34% {
+        transform: translate3d(4px, -4px, 0) scale(1.08);
+    }
+    67%, 100% {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
 .hero-robot-one {
     top: 0;
     right: 16px;

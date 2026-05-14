@@ -217,6 +217,85 @@ function HeroRobot({ frames, className = "" }: { frames: string[][]; className?:
   );
 }
 
+const MATRIX_COLS = 28;
+const MATRIX_ROWS = 24;
+const MATRIX_EMPTY = 0;
+const MATRIX_DIM = 1;
+const MATRIX_BRIGHT = 2;
+const MATRIX_HOT = 3;
+
+const MATRIX_SHAPES = [
+  [[0, 0]],
+  [[0, 0], [0, 1], [0, 2]],
+  [[0, 0], [1, 0], [2, 0]],
+  [[0, 0], [0, 1], [1, 1]],
+  [[0, 0], [1, 0], [1, 1]],
+  [[0, 0], [1, 0], [2, 0], [0, 1]],
+  [[0, 0], [0, 1], [0, 2], [1, 0]],
+  [[0, 0], [1, 0], [1, 1], [2, 1]],
+];
+
+function HeroMatrixGlitch() {
+  const [grid, setGrid] = useState<number[]>([]);
+
+  useEffect(() => {
+    const renderFrame = () => {
+      const next = Array(MATRIX_COLS * MATRIX_ROWS).fill(MATRIX_EMPTY);
+
+      for (let i = 0; i < 30; i++) {
+        const shape = MATRIX_SHAPES[Math.floor(Math.random() * MATRIX_SHAPES.length)];
+        const originX = Math.floor(Math.random() * MATRIX_COLS);
+        const originY = Math.floor(Math.random() * MATRIX_ROWS);
+        const color = Math.random() > 0.82 ? MATRIX_HOT : Math.random() > 0.58 ? MATRIX_BRIGHT : MATRIX_DIM;
+
+        for (const [offsetX, offsetY] of shape) {
+          const x = originX + offsetX;
+          const y = originY + offsetY;
+
+          if (x >= 0 && x < MATRIX_COLS && y >= 0 && y < MATRIX_ROWS) {
+            next[y * MATRIX_COLS + x] = color;
+          }
+        }
+      }
+
+      for (let i = 0; i < 6; i++) {
+        next[Math.floor(Math.random() * next.length)] = MATRIX_HOT;
+      }
+
+      setGrid(next);
+    };
+
+    renderFrame();
+    const intervalId = setInterval(renderFrame, 360);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  return (
+    <div
+      className="hero-matrix-glitch"
+      style={{ gridTemplateColumns: `repeat(${MATRIX_COLS}, minmax(0, 1fr))` }}
+      aria-hidden="true"
+    >
+      {grid.map((value, index) => (
+        <span
+          key={index}
+          style={{ animationDelay: `${(index % 13) * 18}ms` }}
+          className={
+            value === MATRIX_BRIGHT
+              ? "hero-matrix-dot hero-matrix-dot-bright"
+              : value === MATRIX_HOT
+                ? "hero-matrix-dot hero-matrix-dot-hot"
+                : value === MATRIX_DIM
+                  ? "hero-matrix-dot hero-matrix-dot-dim"
+                  : "hero-matrix-dot"
+          }
+        />
+      ))}
+    </div>
+  );
+}
+
 
 
 /* ── Reusable fade-up wrapper ── */
@@ -320,10 +399,7 @@ export default function AboutSection() {
       {/* ── Pure black hero background ── */}
       <div className="pointer-events-none absolute left-6 right-6 top-24 h-px bg-white/[0.08] md:left-10 md:right-10" />
       <div className="pointer-events-none absolute right-8 top-32 hidden h-[520px] w-[360px] lg:block" aria-hidden="true">
-        <HeroRobot frames={HERO_ROBOTS[0]} className="hero-robot-one" />
-        <HeroRobot frames={HERO_ROBOTS[1]} className="hero-robot-two" />
-        <HeroRobot frames={HERO_ROBOTS[2]} className="hero-robot-three" />
-        <HeroRobot frames={HERO_ROBOTS[3]} className="hero-robot-four" />
+        <HeroMatrixGlitch />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-6 md:px-10">
